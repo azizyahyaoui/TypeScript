@@ -1,4 +1,16 @@
-# TypeScript: 
+# TypeScript 2025 review
+
+
+> Yahyaoui Med Aziz | 06172025.
+
+<details>
+  <summary>Links to resources:</summary>
+  
+  - Docks:
+    - [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- Videos:
+   - [Learn TypeScript - Full Course for Beginners](https://youtu.be/SpwzRDUQ1GI)
+</details>
 
 
 ## Introduction to TypeScript
@@ -11,6 +23,10 @@ TypeScript is an open-source programming language developed and maintained by Mi
 - **Classes and Inheritance**: Provides enhanced support for object-oriented programming.
 - **Modules**: Supports modular programming with ES6 module syntax.
 - **Tooling**: Better tooling with editors and IDEs, including IntelliSense and code navigation.
+- **Type Safety**: Catch errors at compile time
+- **OOP Support**: Classes, interfaces, inheritance
+- **Modern JS**: Async/await, destructuring, decorators
+- **Rich Ecosystem**: `@types` packages for 3rd-party libraries
 
 ## JavaScript vs. TypeScript
 
@@ -27,17 +43,47 @@ TypeScript is an open-source programming language developed and maintained by Mi
 - Better tooling support
 - Transpiles to JavaScript, ensuring compatibility with existing JavaScript codebases and environments
 
+| Feature                | JavaScript          | TypeScript          |
+|------------------------|---------------------|---------------------|
+| Typing                 | Dynamic             | Static (optional)   |
+| Compilation            | Runtime errors      | Compile-time checks |
+| OOP Features           | Basic               | Advanced            |
+| Tooling Support        | Limited             | Rich (VS Code)      |
+| Adoption               | Browsers/Node.js    | Large-scale apps    |
+
+---
+
 ## TypeScript Syntax
 
-### Basic Types
+### Primitive Types
 ```typescript
-let isDone: boolean = false;
+let isAuth: boolean = false;
+let isAdmin: boolean = true;
 let age: number = 25;
-let name: string = "John";
+let price: number = 9.99;
+let username: string = "Alice";
+//let name: string = "John";  // ❌ the word name is 
 let list: number[] = [1, 2, 3, 4];
 let tuple: [string, number] = ["hello", 10];
 enum Color {Red, Green, Blue}
 let c: Color = Color.Green;
+
+
+
+
+// Arrays
+let numbers: number[] = [1, 2, 3];
+let names: Array<string> = ["Alice", "Bob"];
+
+// Tuples
+let user: [string, number] = ["Alice", 30];
+
+// Enums (Modern)
+enum Status {
+  Active = "ACTIVE",
+  Inactive = "INACTIVE"
+}
+
 ```
 
 ### Functions
