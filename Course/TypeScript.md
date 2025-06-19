@@ -1,6 +1,7 @@
 # TypeScript 2025 review
 
 
+
 > Yahyaoui Med Aziz | 06172025.
 
 <details>
@@ -62,18 +63,15 @@ let isAdmin: boolean = true;
 let age: number = 25;
 let price: number = 9.99;
 let username: string = "Alice";
-//let name: string = "John";  // ❌ the word name is 
+//let name: string = "John";  // ❌ the word name is considered as a global scope variable. And there is more. 
 let list: number[] = [1, 2, 3, 4];
 let tuple: [string, number] = ["hello", 10];
 enum Color {Red, Green, Blue}
 let c: Color = Color.Green;
 
-
-
-
 // Arrays
 let numbers: number[] = [1, 2, 3];
-let names: Array<string> = ["Alice", "Bob"];
+let names: Array<string> = ["Alice", "Bob"]; //  Array using generic type 
 
 // Tuples
 let user: [string, number] = ["Alice", 30];
