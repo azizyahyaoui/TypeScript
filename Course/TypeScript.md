@@ -31,13 +31,13 @@ TypeScript is an open-source programming language developed and maintained by Mi
 
 ## JavaScript vs. TypeScript
 
-### JavaScript
+#### JavaScript
 - Dynamically typed
 - No compile-time type checking
 - Limited support for modern programming paradigms like OOP and interfaces
 - Simplicity and flexibility, which can lead to runtime errors
 
-### TypeScript
+#### TypeScript
 - Statically typed (with optional typing)
 - Compile-time type checking
 - Supports modern programming paradigms (OOP, interfaces, generics)
@@ -82,6 +82,29 @@ enum Status {
   Inactive = "INACTIVE"
 }
 
+// Object
+let user: {
+    username: string;
+    email: string;
+    age: number;
+    isActive: boolean;
+} = {
+    username: "Aziz Yahyaoui",
+    email: "",
+    age: 27,
+    isActive: true
+};
+
+
+
+```
+### Special Types
+```typescript
+let unknownValue: unknown;  // Safer alternative to 'any'
+let nullable: string | null = null;
+
+// Type Assertions
+const element = document.getElementById("root") as HTMLElement;
 ```
 
 ### Functions
@@ -91,13 +114,25 @@ function add(x: number, y: number): number {
 }
 
 let result: number = add(5, 10);
+
+// Optional parameters & default values
+function greet(name: string, title?: string): string {
+  return title ? `${title} ${name}` : name;
+}
+
+// Arrow function with type
+const sum = (a: number, b: number): number => a + b;
+
 ```
 
 ### Interfaces
 ```typescript
 interface Person {
+    id: number;
     firstName: string;
     lastName: string;
+    readonly username: string;  // Immutable
+    email?: string;  // Optional
 }
 
 function greet(person: Person) {
@@ -106,6 +141,11 @@ function greet(person: Person) {
 
 let user = { firstName: "John", lastName: "Doe" };
 console.log(greet(user));
+
+// Extending interfaces
+interface Admin extends User {
+  permissions: string[];
+}
 ```
 
 ### Classes
@@ -523,3 +563,16 @@ tsc -p tsconfig.spec.json
 This approach helps keep your configurations modular and focused on specific aspects of your project.
 
 ---
+
+## Common Errors
+| Error Message                          | Solution                          |
+|----------------------------------------|-----------------------------------|
+| **Object is possibly 'null'**          | Use optional chaining (`?.`)      |
+| **Type 'X' is missing property 'Y'**   | Use type assertion or narrowing   |
+| **Cannot find module 'X'**             | Install `@types/X`                |
+| **'this' implicitly has type 'any'**   | Enable `noImplicitThis`           |
+| **Parameter has type 'any'**           | Enable `noImplicitAny`            |
+
+---
+
+**Pro Tip**: Always use the [TypeScript Playground](https://www.typescriptlang.org/play) to experiment with types!

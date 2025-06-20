@@ -47,6 +47,28 @@ let user: {
 };
 
 // Object with optional properties
+let userWithOptional: {
+    username: string;
+    email?: string; // Optional property
+    age: number;
+    isActive: boolean;
+} = {
+    username: "Aziz Yahyaoui",
+    age: 27,
+    isActive: true
+};
 
+// Function with typed parameters and return type
+function greetUser(name: string, age: number): string {
+    return `Hello, ${name}! You are ${age} years old.`;
+}
+// Function with optional parameter
+function greetUserOptional(name: string, age?: number): string {
+    if (age) {
+        return `Hello, ${name}! You are ${age} years old.`;
+    } else {
+        return `Hello, ${name}!`;
+    }
+}
 
 
