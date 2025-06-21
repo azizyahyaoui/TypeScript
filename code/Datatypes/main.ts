@@ -10,7 +10,7 @@ let isAdmin: boolean = false;
 let phoneNumber: string | number = "+2162292992929"; // Union type
 let userId: number | string = 12345; // Union type
 
-//Arrays and Tuples
+//Arrays
 let programmingLanguages: string[] = ["JavaScript", "TypeScript", "Python"];
 let hobbies: Array<string> = ["Reading", "Gaming", "Traveling"]; // Array using generic type 
 let scores: number[] = [85, 90, 78, 92];
@@ -23,15 +23,20 @@ let tupleExample: [number, string, boolean] = [1, "Alice", true]; // Tuple type
 let x: any = 'anything'; // any type
 let arr: any[] = [1, true, 'someString']; // any array
 
-// Enum
+// Enums
+// Classic Numeric Enums
+enum Color {Red, Green, Blue}
+let favoriteColor: Color = Color.Red; // Using enum
+console.log(favoriteColor);
+
+// Modern enums String enums 
 enum UserRole {
     Admin = "Admin",
     User = "User",
     Guest = "Guest"
 }
-let userRole: UserRole = UserRole.Admin; // Using enum
-let userRole2: UserRole = UserRole.User; // Using enum
-
+let userRole: UserRole = UserRole.Admin;
+let userRole2: UserRole = UserRole.User;
 
 // Object
 let user: {
