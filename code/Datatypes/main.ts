@@ -11,6 +11,7 @@ let username: string = "Aziz Yahyaoui";
 let email: string = "aziz@email.com";
 let age: number = 27;
 let salary: number = 1500.50;
+let bigNumber: bigint = 12345678901234567890n; // BigInt type for large integers
 let isAuth: boolean = true;
 let isAdmin: boolean = false;
 let phoneNumber: string | number = "+2162292992929"; // Union type

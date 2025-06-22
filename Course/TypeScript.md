@@ -66,6 +66,7 @@ let isAuth: boolean = false;
 let isAdmin: boolean = true;
 let age: number = 25;
 let price: number = 9.99;
+let bigNumber: bigint = 12345678901234567890n;
 let username: string = "Alice";
 //let name: string = "John";  // ❌ the word name is considered as a global scope variable. And there is more. 
 let list: number[] = [1, 2, 3, 4];
@@ -854,6 +855,52 @@ const lengths = mapArray(["Aziz", "DevOps", "TS"], (word) => word.length);
 
 ---
 
+### Advanced Types
+
+#### Union & Intersection
+```typescript
+type ID = string | number;
+type Coord = { x: number } & { y: number };
+```
+
+#### Generics
+```typescript
+function identity<T>(arg: T): T {
+  return arg;
+}
+
+interface ApiResponse<T> {
+  data: T;
+  status: number;
+}
+
+class Box<T> {
+  constructor(public content: T) {}
+}
+```
+
+#### Utility Types
+```typescript
+type PartialUser = Partial<User>;  // All properties optional
+type ReadonlyUser = Readonly<User>;
+type UserPreview = Pick<User, "id" | "username">;
+type UserWithoutId = Omit<User, "id">;
+```
+
+#### Type Guards
+```typescript
+// Type predicate
+function isString(value: unknown): value is string {
+  return typeof value === "string";
+}
+
+// Discriminated Union
+type Shape = 
+  | { kind: "circle"; radius: number }
+  | { kind: "square"; size: number };
+```
+
+---
 
 
 ### Interfaces
