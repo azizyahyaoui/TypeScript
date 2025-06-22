@@ -384,8 +384,6 @@ let username: string = "Alice";
 //let name: string = "John";  // ❌ the word name is considered as a global scope variable. And there is more. 
 let list: number[] = [1, 2, 3, 4];
 let tuple: [string, number] = ["hello", 10];
-enum Color {Red, Green, Blue}
-let c: Color = Color.Green;
 
 // Arrays
 let numbers: number[] = [1, 2, 3];
@@ -1258,9 +1256,9 @@ const lengths = mapArray(["Aziz", "DevOps", "TS"], (word) => word.length);
 
 ---
 
-### Advanced Types
 
-#### Union & Intersection
+
+### Union & Intersection
 ```typescript
 type ID = string | number;
 type Coord = { x: number } & { y: number };
@@ -1353,21 +1351,38 @@ dog.move(10);
 ```
 
 
-## Tips to start with
+## **Tips to start with And Best Practices**
 
-1. **Use IDEs with TypeScript Support**: VS Code, WebStorm, and other modern editors have excellent TypeScript support, including IntelliSense, type checking, and refactoring tools.
-2. **Enable Strict Mode**: This enforces best practices and helps catch potential errors early.
+1. **Enable Strict Mode**: Always set `"strict": true`. This enforces best practices and helps catch potential errors early.
+
+2. **Avoid `any`**: Use `unknown` with type guards
+
+3. **Use Type Inference**: Don't over-annotate
+   ```typescript
+   const numbers = [1, 2, 3];  // Inferred as number[]
+   ```
+
+4. **Leverage Utility Types**: Reduce boilerplate
+
+5. **Modern Features**:
+   ```typescript
+   // Optional chaining
+   const street = user?.address?.street;
+   
+   // Nullish coalescing
+   const page = inputPage ?? 1;
+   
+   // Readonly arrays
+   const colors: ReadonlyArray<string> = ["red", "green"];
+   ```
+6. **Use IDEs with TypeScript Support**: VS Code, WebStorm, and other modern editors have excellent TypeScript support, including IntelliSense, type checking, and refactoring tools.
+
 3. **Use Type Definitions**: For third-party libraries, use `@types` packages to get type definitions. For example:
    ```bash
    npm install --save @types/lodash
    ```
-4. **Read the Official Handbook**: The [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/intro.html) is a great resource to get a deeper understanding of the language.
-5. **Practice and Build Projects**: The best way to learn TypeScript is by building projects and solving real problems.
 
-I hope this helps you get started with TypeScript! If you have any specific questions or need further assistance, feel free to ask.
-`"use strict";` is a directive in JavaScript that enables strict mode. Strict mode is a way to opt in to a restricted variant of JavaScript, which helps you write cleaner code by catching common coding mistakes and "unsafe" actions. When you include `"use strict";` at the beginning of a JavaScript file or a function, the entire script or function executes in strict mode.
-
-## Benefits of Strict Mode
+### Benefits of Strict Mode
 1. **Eliminates Some JavaScript Silent Errors**: By changing them to throw errors.
 2. **Fixes Mistakes That Make It Difficult for JavaScript Engines to Perform Optimizations**: By eliminating some silent errors, strict mode can sometimes lead to improved performance.
 3. **Prohibits Some Syntax Likely to Be Defined in Future Versions of ECMAScript**: This prevents code from breaking in the future.
@@ -1434,9 +1449,9 @@ function anotherFunction() {
    ```
 
 ### Using Strict Mode in TypeScript
-TypeScript modules are always in strict mode, so you don't need to explicitly declare `"use strict";` in your TypeScript files. The TypeScript compiler will automatically insert the strict mode directive when it transpiles TypeScript to JavaScript.
+> TypeScript modules are always in strict mode, so you don't need to explicitly declare `"use strict";` in your TypeScript files. The TypeScript compiler will automatically insert the strict mode directive when it transpiles TypeScript to JavaScript.
 
-However, if you're working with plain JavaScript or older JavaScript code, adding `"use strict";` can help catch errors early and enforce a cleaner coding style.
+> However, if you're working with plain JavaScript or older JavaScript code, adding `"use strict";` can help catch errors early and enforce a cleaner coding style.
 
 ---
 
