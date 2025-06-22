@@ -1415,7 +1415,7 @@ const totalActive: number = users.reduce(
 
 ---
 
-##### 🧠 Bonus: Strong Typing with Generics
+##### 🧠 Bonus: Strong Typing with Generics(will discover it in next section)
 
 ```ts
 function mapArray<T, U>(arr: T[], fn: (item: T) => U): U[] {
@@ -1551,9 +1551,7 @@ console.log(userRoles.get(1)); // "Admin"
 
 ---
 
-#### Record, WeakMap, WeakSet in TypeScript
-
----
+### Record, WeakMap, WeakSet in TypeScript
 
 ##### 🧾 `Record<K, V>`
 
