@@ -56,6 +56,319 @@ TypeScript is an open-source programming language developed and maintained by Mi
 
 ---
 
+## **TypeScript Compiler (`tsc`)**
+
+The TypeScript compiler (`tsc`) is used to compile TypeScript code into JavaScript. You can install it globally using npm:
+
+```bash
+npm install -g typescript
+```
+
+### Compiling TypeScript Files
+To compile a TypeScript file (`example.ts`), use the following command:
+
+```bash
+tsc example.ts
+```
+
+This will generate an equivalent JavaScript file (`example.js`).
+
+```bash
+node example.ts
+```
+
+### tsconfig.json
+
+For larger projects, it's convenient to use a `tsconfig.json` file to manage TypeScript project settings. You can create one using:
+
+```bash
+tsc --init
+```
+
+This will create a `tsconfig.json` file with default settings. You can customize it as needed. Here’s an example:
+
+```json
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
+```
+
+#### Running TypeScript
+
+To compile the project using `tsconfig.json`, simply run:
+
+```bash
+tsc
+```
+
+This will compile all the TypeScript files specified in the `include` section of `tsconfig.json` and output the JavaScript files to the `outDir`.
+
+
+#### tsconfig json file:
+
+> The `tsconfig.json` file in TypeScript is used to configure how the TypeScript compiler (`tsc`) behaves when it compiles your TypeScript code. This file is crucial for managing the settings of your TypeScript project, including compiler options, file paths, and other configurations.
+
+Here’s a more detailed overview of the `tsconfig.json` file, including some of the most common configurations:
+
+#### Basic Structure of `tsconfig.json`
+The `tsconfig.json` file is a JSON file that contains various compiler options and settings. A basic `tsconfig.json` might look like this:
+
+```json
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
+```
+
+#### Common `compilerOptions`
+
+1. **target**
+   - Specifies the ECMAScript target version: `"es5"`, `"es6"`, `"es2015"`, `"es2016"`, `"es2017"`, `"es2018"`, `"es2019"`, `"es2020"`, `"es2021"`, `"esnext"`.
+   ```json
+   "target": "es6"
+   ```
+
+2. **module**
+   - Specifies the module system: `"commonjs"`, `"amd"`, `"umd"`, `"system"`, `"es6"`, `"es2015"`, `"esnext"`, `"none"`.
+   ```json
+   "module": "commonjs"
+   ```
+
+3. **strict**
+   - Enables all strict type-checking options.
+   ```json
+   "strict": true
+   ```
+
+4. **outDir**
+   - Redirects the output structure to the specified directory.
+   ```json
+   "outDir": "./dist"
+   ```
+
+5. **rootDir**
+   - Specifies the root directory of input files.
+   ```json
+   "rootDir": "./src"
+   ```
+
+6. **esModuleInterop**
+   - Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports.
+   ```json
+   "esModuleInterop": true
+   ```
+
+7. **forceConsistentCasingInFileNames**
+   - Ensures that file names are treated consistently across the project.
+   ```json
+   "forceConsistentCasingInFileNames": true
+   ```
+
+8. **skipLibCheck**
+   - Skips type checking of all declaration files (`.d.ts`).
+   ```json
+   "skipLibCheck": true
+   ```
+
+9. **sourceMap**
+   - Generates corresponding `.map` files.
+   ```json
+   "sourceMap": true
+   ```
+
+10. **removeComments**
+    - Removes comments from the output.
+    ```json
+    "removeComments": true
+    ```
+
+#### `include` and `exclude`
+These settings control which files are included in the project and which are excluded.
+
+- **include**: Specifies a list of glob patterns to include in the project.
+  ```json
+  "include": ["src/**/*"]
+  ```
+
+- **exclude**: Specifies a list of glob patterns to exclude from the project.
+  ```json
+  "exclude": ["node_modules", "**/*.spec.ts"]
+  ```
+
+#### Example Configuration
+
+Here’s an example `tsconfig.json` for a typical Node.js project:
+
+```json
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "sourceMap": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/*.test.ts"]
+}
+```
+
+### Advanced Configurations
+
+1. **baseUrl and paths**
+   - Configure module resolution.
+   ```json
+   "baseUrl": "./",
+   "paths": {
+     "@app/*": ["src/app/*"]
+   }
+   ```
+
+2. **lib**
+   - Specify a list of library files to include in the compilation.
+   ```json
+   "lib": ["es2017", "dom"]
+   ```
+
+3. **typeRoots**
+   - Specify a list of folders to include type definitions from.
+   ```json
+   "typeRoots": ["./node_modules/@types", "./custom_typings"]
+   ```
+
+4. **declaration**
+   - Generates corresponding `.d.ts` files.
+   ```json
+   "declaration": true
+   ```
+
+#### Creating `tsconfig.json`
+You can create a `tsconfig.json` file with default values by running:
+```bash
+tsc --init
+```
+
+This will generate a `tsconfig.json` file with a comprehensive list of commented options.
+
+Understanding and configuring `tsconfig.json` appropriately is essential for managing your TypeScript project effectively. It ensures that your code is compiled with the correct settings, making it easier to maintain and scale.
+
+In a `tsconfig.json` file, patterns like `**/*.spec.ts` are often used in the `exclude` array to exclude test files from being compiled. The `.spec.ts` extension typically indicates a TypeScript file that contains unit tests written with testing frameworks such as Jasmine, Mocha, or Jest.
+
+#### Using `exclude` in `tsconfig.json`
+
+When you have files that you don't want to be included in the compilation, such as test files, you can use the `exclude` property. This helps in reducing compile time and ensures that only the relevant files are part of the build output.
+
+Here's an example configuration:
+
+```json
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "sourceMap": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/*.test.ts", "**/*.spec.ts"]
+}
+```
+
+#### Explanation
+- **include**: Specifies the files or directories to be included in the compilation. In this case, it includes all files in the `src` directory.
+- **exclude**: Specifies the files or directories to be excluded from the compilation. Common patterns include:
+  - `node_modules`: Excludes all files in the `node_modules` directory.
+  - `**/*.test.ts`: Excludes all files ending in `.test.ts` in any directory.
+  - `**/*.spec.ts`: Excludes all files ending in `.spec.ts` in any directory.
+
+#### Why Exclude Test Files?
+
+1. **Reduce Compile Time**: Excluding test files can significantly reduce the time it takes to compile your TypeScript project, especially in large projects with many tests.
+2. **Separate Concerns**: Keeps the build output clean and focused on the production code. Test files are typically only relevant in the development and testing phases.
+3. **Avoid Compilation Errors**: Test files might have dependencies or setup code that isn’t needed or present in the production build, potentially causing unnecessary compilation errors.
+
+#### Example of a Test File
+A `.spec.ts` file might look like this:
+
+```typescript
+import { add } from './math';
+
+describe('add function', () => {
+  it('should add two numbers correctly', () => {
+    expect(add(1, 2)).toBe(3);
+  });
+});
+```
+
+#### Including Test Files Separately
+If you need to compile the test files separately, you can create another `tsconfig.json` specifically for tests:
+
+**tsconfig.json** (main config)
+```json
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "sourceMap": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "**/*.test.ts", "**/*.spec.ts"]
+}
+```
+
+**tsconfig.spec.json** (for test files)
+```json
+{
+  "extends": "./tsconfig.json",
+  "include": ["src/**/*.spec.ts", "src/**/*.test.ts"]
+}
+```
+
+You can compile the test configuration separately using:
+
+```bash
+tsc -p tsconfig.spec.json
+```
+
+This approach helps keep your configurations modular and focused on specific aspects of your project.
+
+---
+
 ## TypeScript Syntax
 
 ### **Primitive Types**
@@ -746,6 +1059,96 @@ const u2 = getUser("Aziz");    // OK
 
 ---
 
+#### Rest Parameters in TypeScript
+
+---
+
+##### 📦 Basic Example
+
+```ts
+function logMessages(...messages: string[]): void {
+  messages.forEach((msg) => console.log(msg));
+}
+
+logMessages("Hello", "World", "TS is awesome");
+// Output:
+// Hello
+// World
+// TS is awesome
+```
+
+✅ The `...messages` is a **rest parameter**, allowing you to pass **any number of arguments**
+✅ TypeScript enforces all args must be of the type `string`
+
+---
+
+##### 🧠 Use with Other Parameters
+
+```ts
+function greetAll(greeting: string, ...names: string[]): void {
+  names.forEach((name) => console.log(`${greeting}, ${name}!`));
+}
+
+greetAll("Hey", "Aziz", "Yahyaoui", "SoftDev");
+// Output:
+// Hey, Aziz!
+// Hey, Yahyaoui!
+// Hey, SoftDev!
+```
+
+✅ You can combine normal and rest parameters — but the **rest must come last**
+
+---
+
+##### 🧪 Strong Typing with Tuples
+
+You can go **next level** with tuple types + rest:
+
+```ts
+function formatCoordinates(...coords: [number, number]): string {
+  const [x, y] = coords;
+  return `X: ${x}, Y: ${y}`;
+}
+
+formatCoordinates(10, 25); // "X: 10, Y: 25"
+```
+
+✅ Only **two numbers allowed** — safe and strict
+
+---
+
+##### 🛑 Invalid Usage Examples
+
+```ts
+function wrong(...vals: string, msg: string) {} // ❌ Error: Rest param must be last
+```
+
+---
+
+##### 💼 Real-World Use Case
+
+```ts
+type LogLevel = "info" | "warn" | "error";
+
+function log(level: LogLevel, ...messages: string[]) {
+  console.log(`[${level.toUpperCase()}]`, ...messages);
+}
+
+log("info", "Server started", "on port", "3000");
+```
+
+---
+
+##### 🧱 Summary Brick
+
+| Feature      | Syntax                          | Notes                           |
+| ------------ | ------------------------------- | ------------------------------- |
+| Rest params  | `(...args: T[])`                | Collects multiple args as array |
+| Must be last | `param, ...rest`                | Rest param must be last         |
+| Tuple combo  | `(...[x, y]: [number, number])` | Enforces fixed-length input     |
+| Use case     | Logging, aggregation, APIs      | Flexible and clean              |
+
+
 #### Functional Array Methods with TypeScript
 
 ---
@@ -949,59 +1352,6 @@ dog.bark();
 dog.move(10);
 ```
 
-## TypeScript Compiler (`tsc`)
-
-The TypeScript compiler (`tsc`) is used to compile TypeScript code into JavaScript. You can install it globally using npm:
-
-```bash
-npm install -g typescript
-```
-
-### Compiling TypeScript Files
-To compile a TypeScript file (`example.ts`), use the following command:
-
-```bash
-tsc example.ts
-```
-
-This will generate an equivalent JavaScript file (`example.js`).
-
-### tsconfig.json
-
-For larger projects, it's convenient to use a `tsconfig.json` file to manage TypeScript project settings. You can create one using:
-
-```bash
-tsc --init
-```
-
-This will create a `tsconfig.json` file with default settings. You can customize it as needed. Here’s an example:
-
-```json
-{
-  "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "strict": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules"]
-}
-```
-
-### Running TypeScript
-
-To compile the project using `tsconfig.json`, simply run:
-
-```bash
-tsc
-```
-
-This will compile all the TypeScript files specified in the `include` section of `tsconfig.json` and output the JavaScript files to the `outDir`.
 
 ## Tips to start with
 
@@ -1087,258 +1437,6 @@ function anotherFunction() {
 TypeScript modules are always in strict mode, so you don't need to explicitly declare `"use strict";` in your TypeScript files. The TypeScript compiler will automatically insert the strict mode directive when it transpiles TypeScript to JavaScript.
 
 However, if you're working with plain JavaScript or older JavaScript code, adding `"use strict";` can help catch errors early and enforce a cleaner coding style.
-
----
-
-## tsconfig json file:
-The `tsconfig.json` file in TypeScript is used to configure how the TypeScript compiler (`tsc`) behaves when it compiles your TypeScript code. This file is crucial for managing the settings of your TypeScript project, including compiler options, file paths, and other configurations.
-
-Here’s a more detailed overview of the `tsconfig.json` file, including some of the most common configurations:
-
-### Basic Structure of `tsconfig.json`
-The `tsconfig.json` file is a JSON file that contains various compiler options and settings. A basic `tsconfig.json` might look like this:
-
-```json
-{
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "strict": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules"]
-}
-```
-
-### Common `compilerOptions`
-
-1. **target**
-   - Specifies the ECMAScript target version: `"es5"`, `"es6"`, `"es2015"`, `"es2016"`, `"es2017"`, `"es2018"`, `"es2019"`, `"es2020"`, `"es2021"`, `"esnext"`.
-   ```json
-   "target": "es6"
-   ```
-
-2. **module**
-   - Specifies the module system: `"commonjs"`, `"amd"`, `"umd"`, `"system"`, `"es6"`, `"es2015"`, `"esnext"`, `"none"`.
-   ```json
-   "module": "commonjs"
-   ```
-
-3. **strict**
-   - Enables all strict type-checking options.
-   ```json
-   "strict": true
-   ```
-
-4. **outDir**
-   - Redirects the output structure to the specified directory.
-   ```json
-   "outDir": "./dist"
-   ```
-
-5. **rootDir**
-   - Specifies the root directory of input files.
-   ```json
-   "rootDir": "./src"
-   ```
-
-6. **esModuleInterop**
-   - Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports.
-   ```json
-   "esModuleInterop": true
-   ```
-
-7. **forceConsistentCasingInFileNames**
-   - Ensures that file names are treated consistently across the project.
-   ```json
-   "forceConsistentCasingInFileNames": true
-   ```
-
-8. **skipLibCheck**
-   - Skips type checking of all declaration files (`.d.ts`).
-   ```json
-   "skipLibCheck": true
-   ```
-
-9. **sourceMap**
-   - Generates corresponding `.map` files.
-   ```json
-   "sourceMap": true
-   ```
-
-10. **removeComments**
-    - Removes comments from the output.
-    ```json
-    "removeComments": true
-    ```
-
-### `include` and `exclude`
-These settings control which files are included in the project and which are excluded.
-
-- **include**: Specifies a list of glob patterns to include in the project.
-  ```json
-  "include": ["src/**/*"]
-  ```
-
-- **exclude**: Specifies a list of glob patterns to exclude from the project.
-  ```json
-  "exclude": ["node_modules", "**/*.spec.ts"]
-  ```
-
-### Example Configuration
-
-Here’s an example `tsconfig.json` for a typical Node.js project:
-
-```json
-{
-  "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "sourceMap": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/*.test.ts"]
-}
-```
-
-### Advanced Configurations
-
-1. **baseUrl and paths**
-   - Configure module resolution.
-   ```json
-   "baseUrl": "./",
-   "paths": {
-     "@app/*": ["src/app/*"]
-   }
-   ```
-
-2. **lib**
-   - Specify a list of library files to include in the compilation.
-   ```json
-   "lib": ["es2017", "dom"]
-   ```
-
-3. **typeRoots**
-   - Specify a list of folders to include type definitions from.
-   ```json
-   "typeRoots": ["./node_modules/@types", "./custom_typings"]
-   ```
-
-4. **declaration**
-   - Generates corresponding `.d.ts` files.
-   ```json
-   "declaration": true
-   ```
-
-### Creating `tsconfig.json`
-You can create a `tsconfig.json` file with default values by running:
-```bash
-tsc --init
-```
-
-This will generate a `tsconfig.json` file with a comprehensive list of commented options.
-
-Understanding and configuring `tsconfig.json` appropriately is essential for managing your TypeScript project effectively. It ensures that your code is compiled with the correct settings, making it easier to maintain and scale.
-
-In a `tsconfig.json` file, patterns like `**/*.spec.ts` are often used in the `exclude` array to exclude test files from being compiled. The `.spec.ts` extension typically indicates a TypeScript file that contains unit tests written with testing frameworks such as Jasmine, Mocha, or Jest.
-
-### Using `exclude` in `tsconfig.json`
-
-When you have files that you don't want to be included in the compilation, such as test files, you can use the `exclude` property. This helps in reducing compile time and ensures that only the relevant files are part of the build output.
-
-Here's an example configuration:
-
-```json
-{
-  "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "sourceMap": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/*.test.ts", "**/*.spec.ts"]
-}
-```
-
-### Explanation
-- **include**: Specifies the files or directories to be included in the compilation. In this case, it includes all files in the `src` directory.
-- **exclude**: Specifies the files or directories to be excluded from the compilation. Common patterns include:
-  - `node_modules`: Excludes all files in the `node_modules` directory.
-  - `**/*.test.ts`: Excludes all files ending in `.test.ts` in any directory.
-  - `**/*.spec.ts`: Excludes all files ending in `.spec.ts` in any directory.
-
-### Why Exclude Test Files?
-1. **Reduce Compile Time**: Excluding test files can significantly reduce the time it takes to compile your TypeScript project, especially in large projects with many tests.
-2. **Separate Concerns**: Keeps the build output clean and focused on the production code. Test files are typically only relevant in the development and testing phases.
-3. **Avoid Compilation Errors**: Test files might have dependencies or setup code that isn’t needed or present in the production build, potentially causing unnecessary compilation errors.
-
-### Example of a Test File
-A `.spec.ts` file might look like this:
-
-```typescript
-import { add } from './math';
-
-describe('add function', () => {
-  it('should add two numbers correctly', () => {
-    expect(add(1, 2)).toBe(3);
-  });
-});
-```
-
-### Including Test Files Separately
-If you need to compile the test files separately, you can create another `tsconfig.json` specifically for tests:
-
-**tsconfig.json** (main config)
-```json
-{
-  "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "sourceMap": true
-  },
-  "include": ["src"],
-  "exclude": ["node_modules", "**/*.test.ts", "**/*.spec.ts"]
-}
-```
-
-**tsconfig.spec.json** (for test files)
-```json
-{
-  "extends": "./tsconfig.json",
-  "include": ["src/**/*.spec.ts", "src/**/*.test.ts"]
-}
-```
-
-You can compile the test configuration separately using:
-
-```bash
-tsc -p tsconfig.spec.json
-```
-
-This approach helps keep your configurations modular and focused on specific aspects of your project.
 
 ---
 
