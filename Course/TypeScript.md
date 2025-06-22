@@ -313,29 +313,148 @@ let perms = FilePermission.Read | FilePermission.Write;
 
 ---
 
-### **Objects:**
+### **Objects in TypeScript**
+
+TypeScript lets you define the shape of objects with explicit property types, optional fields, and immutability. This improves code safety and editor support.
+
+#### **Basic Object Type**
 
 ```ts
-// Object
 let user: {
-    username: string;
-    email: string;
-    age: number;
-    isActive: boolean;
+  username: string;
+  email: string;
+  age: number;
+  isActive: boolean;
 } = {
-    username: "Aziz Yahyaoui",
-    email: "",
-    age: 27,
-    isActive: true
+  username: "Aziz Yahyaoui",
+  email: "email@email.xyz",
+  age: 27,
+  isActive: true
+};
+```
+
+- All properties are required and strictly typed.
+- TypeScript will error if you miss a property or use the wrong type.
+
+---
+
+#### **Objects with Optional Properties**
+
+Use `?` to mark properties as optional.
+
+```ts
+let product: {
+  name: string;
+  price: number;
+  description?: string; // Optional property
+} = {
+  name: "Laptop",
+  price: 1200
+  // description is optional
+};
+```
+
+- You can omit `description` when creating the object.
+- TypeScript will enforce the type if you provide it.
+
+---
+
+#### **Objects with Readonly Properties**
+
+The `readonly` modifier prevents reassignment after initialization, making objects (or properties) immutable.
+
+```ts
+let config: {
+  readonly apiUrl: string;
+  timeout: number;
+} = {
+  apiUrl: "https://api.example.com",
+  timeout: 5000
 };
 
+// config.apiUrl = "https://another.com"; // ❌ Error: Cannot assign to 'apiUrl' because it is a read-only property.
 ```
-#### 🧠 When to Use Inline vs Reusable:
+
+- Use `readonly` for constants, IDs, or settings that should never change.
+
+---
+
+#### **Index Signatures**
+
+For objects with dynamic keys, use index signatures:
+
+```ts
+let scores: { [username: string]: number } = {
+  "alice": 95,
+  "bob": 88
+};
+```
+
+- Allows any string key with a number value.
+
+---
+
+#### **Nested Objects**
+
+You can nest object types for more complex structures:
+
+```ts
+let order: {
+  id: number;
+  product: {
+    name: string;
+    price: number;
+  };
+  quantity: number;
+} = {
+  id: 1,
+  product: { name: "Phone", price: 800 },
+  quantity: 2
+};
+```
+
+---
+
+#### **Type Aliases for Objects**
+
+For reusability and cleaner code, use `type` or `interface`:
+
+```ts
+type User = {
+  username: string;
+  email: string;
+  age: number;
+  isActive: boolean;
+};
+
+let admin: User = {
+  username: "Admin",
+  email: "admin@example.com",
+  age: 30,
+  isActive: true
+};
+```
+
+---
+
+#### 🧠 When to Use Inline vs. Reusable Types
+
 | Scenario                         | Use Inline Object | Use `type`/`interface` |
 | -------------------------------- | ----------------- | ---------------------- |
-| One-time use                     | ✅ Yes             | ❌ Not necessary        |
-| Reuse across variables/functions | ❌ No              | ✅ Recommended          |
-| Cleaner code in large projects   | ❌ Cluttered       | ✅ Clean and DRY        |
+| One-time use                     | ✅ Yes            | ❌ Not necessary        |
+| Reuse across variables/functions | ❌ No             | ✅ Recommended          |
+| Cleaner code in large projects   | ❌ Cluttered      | ✅ Clean and DRY        |
+
+---
+
+#### **Summary**
+
+- Use inline object types for quick, one-off structures.
+- Use `type` or `interface` for reusable, scalable, and maintainable code.
+- Leverage optional and readonly properties for flexibility and safety.
+- Index signatures and nested objects help model complex data.
+
+---
 
 
 ### **Special Types**
@@ -344,9 +463,11 @@ let user: {
 ```ts
 let unknownValue: unknown;  // Safer alternative to 'any'
 let nullable: string | null = null;
+let undefinedValue: undefined = undefined; // undefined type
 
 // Type Assertions
 const element = document.getElementById("root") as HTMLElement;
+let anotherStringLength: number = (<string>anotherValue).length; // Using angle brackets syntax
 ```
 
 #### 🔒 `unknown`
