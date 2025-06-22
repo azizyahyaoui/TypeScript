@@ -1147,9 +1147,7 @@ log("info", "Server started", "on port", "3000");
 | Use case     | Logging, aggregation, APIs      | Flexible and clean              |
 
 
-#### Functional Array Methods with TypeScript
-
----
+#### Functional Methods with TypeScript
 
 ##### 🔁 map()
 
@@ -1256,6 +1254,159 @@ const lengths = mapArray(["Aziz", "DevOps", "TS"], (word) => word.length);
 
 ---
 
+### **Interfaces in TypeScript**
+
+Interfaces define the **shape of objects**—what properties and methods they must have. They are ideal for contracts, APIs, and class structures.
+
+```typescript
+interface Person {
+  id: number;
+  firstName: string;
+  lastName: string;
+  readonly username: string; // Immutable
+  email?: string;            // Optional
+}
+
+function greet(person: Person) {
+  return `Hello, ${person.firstName} ${person.lastName}`;
+}
+
+const user: Person = {
+  id: 1,
+  firstName: "John",
+  lastName: "Doe",
+  username: "johndoe"
+};
+
+console.log(greet(user)); // Hello, John Doe
+```
+
+- **All properties are required** unless marked with `?`.
+- `readonly` makes a property immutable after initialization.
+- Interfaces are only for type checking; they do not generate JS code.
+
+---
+
+#### **Extending Interfaces**
+
+Interfaces can extend other interfaces for reusability and inheritance.
+
+```typescript
+interface User {
+  id: number;
+  username: string;
+}
+
+interface Admin extends User {
+  permissions: string[];
+}
+
+const admin: Admin = {
+  id: 2,
+  username: "adminuser",
+  permissions: ["manage-users", "edit-content"]
+};
+```
+
+- Use `extends` to build on existing interfaces.
+- Multiple interfaces can be extended with a comma: `interface Manager extends User, Employee { ... }`
+
+---
+
+#### **Interface vs. Type Alias**
+
+| Feature                | `interface`         | `type`                |
+|------------------------|---------------------|-----------------------|
+| Extends/implements     | ✅ Yes              | ✅ Yes (with objects) |
+| Declaration merging    | ✅ Yes              | ❌ No                 |
+| Unions/intersections   | ❌ No               | ✅ Yes                |
+| Use for primitives     | ❌ No               | ✅ Yes                |
+
+- Use `interface` for object/class shapes and contracts.
+- Use `type` for unions, intersections, primitives, and advanced types.
+
+---
+
+#### **Summary**
+
+- Interfaces are best for defining object/class shapes and contracts.
+- Support optional and readonly properties.
+- Can be extended for scalable, maintainable code.
+- Prefer interfaces for public APIs and class contracts; use types for advanced type features.
+
+
+### **The `type` Keyword in TypeScript**
+
+The `type` keyword in TypeScript is used to create **type aliases**—custom names for existing types. Type aliases improve code readability, reusability, and maintainability, and can represent anything from primitives to complex structures.
+
+#### **Type Alias Basics**
+
+You can alias primitives, objects, arrays, functions, and more:
+
+```typescript
+type Age = number;
+let myAge: Age = 30;
+
+type Person = {
+  name: string;
+  age: number;
+  email?: string; // Optional
+};
+
+type StringArray = string[];
+type Greet = (name: string) => void;
+```
+
+#### **Unions and Intersections** (will discussed in the next section)
+
+Type aliases are essential for unions and intersections:
+
+```typescript
+type ID = number | string; // Union
+
+type HasName = { name: string };
+type HasAge = { age: number };
+type PersonDetails = HasName & HasAge; // Intersection
+```
+
+#### **Tuples and Literal Types**
+
+You can alias tuple types and literal unions for clarity:
+
+```typescript
+type Point = [number, number];
+type Status = "pending" | "success" | "error";
+```
+
+#### **Mapped Types (Advanced)**
+
+Type aliases enable advanced mapped types:
+
+```typescript
+type Optional<T> = { [K in keyof T]?: T[K] };
+
+interface User {
+  id: number;
+  name: string;
+}
+
+type PartialUser = Optional<User>; // { id?: number; name?: string; }
+```
+
+#### **`type` vs. `interface`**
+
+- **`interface`**: Best for describing object shapes and supporting declaration merging (extending or augmenting interfaces).
+- **`type`**: More flexible—can alias primitives, unions, intersections, tuples, and support advanced type features. Cannot be merged.
+
+**Use `type` when:**
+- You need unions, intersections, or mapped/conditional types.
+- You want to alias primitives, tuples, or function signatures.
+
+**Use `interface` when:**
+- Defining object shapes or class contracts.
+- You want to leverage declaration merging.
+
+In simple cases, both are interchangeable for objects, but `type` is more versatile for advanced scenarios.
 
 
 ### Union & Intersection
@@ -1302,30 +1453,6 @@ type Shape =
 ```
 
 ---
-
-
-### Interfaces
-```typescript
-interface Person {
-    id: number;
-    firstName: string;
-    lastName: string;
-    readonly username: string;  // Immutable
-    email?: string;  // Optional
-}
-
-function greet(person: Person) {
-    return `Hello, ${person.firstName} ${person.lastName}`;
-}
-
-let user = { firstName: "John", lastName: "Doe" };
-console.log(greet(user));
-
-// Extending interfaces
-interface Admin extends User {
-  permissions: string[];
-}
-```
 
 ### Classes & OOP
 ```typescript

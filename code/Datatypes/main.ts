@@ -11,12 +11,14 @@ let username: string = "Aziz Yahyaoui";
 let email: string = "aziz@email.com";
 let age: number = 27;
 let salary: number = 1500.50;
-let bigNumber: bigint = 12345678901234567890n; // BigInt type for large integers
+//let bigNumber: bigint = 12345678901234567890n; // BigInt type for large integers //BigInt literals are not available when targeting lower than ES2020.
 let isAuth: boolean = true;
 let isAdmin: boolean = false;
 let phoneNumber: string | number = "+2162292992929"; // Union type
 let userId: number | string = 12345; // Union type
 
+console.log(`Username: ${username}, Email: ${email}, Age: ${age}, Salary: ${salary}, Is Authenticated: ${isAuth}, Is Admin: ${isAdmin}, Phone Number: ${phoneNumber}, User ID: ${userId}`);
+console.log(typeof userId)
 //Arrays
 let programmingLanguages: string[] = ["JavaScript", "TypeScript", "Python"];
 let hobbies: Array<string> = ["Reading", "Gaming", "Traveling"]; // Array using generic type 

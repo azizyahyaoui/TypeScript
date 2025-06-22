@@ -3,3 +3,9 @@
 .ForMe/
 screenshot
 backup/
+*.js
+/build
+/target
+/dist
+node_modules
+*.log
