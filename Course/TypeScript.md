@@ -919,7 +919,7 @@ const sum = (a: number, b: number): number => a + b;
 
 ---
 
-#### 🧱 Function Type Aliases
+#### 🧱 Function Type Aliases(will discussed Type Aliases in the next section)
 
 You can create a reusable function type:
 
@@ -933,17 +933,28 @@ const multiply: MathOperation = (x, y) => x * y;
 
 #### 🧙‍♂️ Anonymous & Callback Functions
 
+Anonymous functions (also called lambda or inline functions) are functions without a name, often used as arguments to higher-order functions like `map`, `filter`, or `forEach`. They are concise and ideal for short, one-off operations.
+
 ```ts
 const numbers = [1, 2, 3];
 
+// Anonymous callback function with forEach
 numbers.forEach((n: number) => {
   console.log(n * 2);
 });
+
+// Using map with an anonymous function
+const squared = numbers.map((n) => n * n); // [1, 4, 9]
 ```
 
----
+- Arrow functions provide a compact syntax and automatically capture the `this` context from their enclosing scope.
+- TypeScript allows you to annotate parameter and return types for callbacks, improving safety and editor support.
+- Anonymous functions are commonly used for event handlers, array methods, and quick callbacks.
+- For complex logic or reuse, prefer named functions for clarity and maintainability.
+- Typing callback parameters helps prevent runtime errors and improves code completion in editors.
+- Arrow functions do **not** have their own `this`—they inherit it from the surrounding context, which is useful in many scenarios.
 
-#### 🧠 Notes
+#### *🧠 Part Notes*
 
 | Feature               | Example                                      |
 | --------------------- | -------------------------------------------- |
@@ -955,25 +966,138 @@ numbers.forEach((n: number) => {
 
 ---
 
-####  `void`, `never`
+#### **`void` and `never` Types**
+
+> In TypeScript, `void` and `never` are **function-specific return types** that help clarify intent and improve type safety.
+
+---
+
+##### 🔹 `void`
+
+- Indicates that a function **does not return any value**
+- Commonly used for **side-effect functions** like logging, updating UI, or triggering events
 
 ```ts
 function log(message: string): void {
   console.log(message);
 }
+```
+✅ The function completes successfully, but doesn't return anything
 
-function fail(msg: string): never {
-  throw new Error(msg);
+
+##### 🔹 `never`
+
+* Indicates that a function **never completes normally**
+* Common in functions that:
+
+  * **Always throw errors**
+  * **Run infinite loops**
+  * Are **used in exhaustive type checking**
+
+```ts
+function fail(errorMessage: string): never {
+  throw new Error(errorMessage);
+}
+try {
+  throwErrorFunc("This function will never return.");
+} catch (error) {
+  if (error instanceof Error) {
+    console.error("Caught an error: " + error.message);
+  } else {
+    console.error("Caught an unknown error:", error);
+  }
 }
 ```
 
-* `void` → function returns **nothing**
-* `never` → function **never returns** (e.g., throws an error or infinite loop)
+##### 🧠 Real-World Use Cases
+
+| Type    | Use Case Example                      | Description                               |
+| ------- | ------------------------------------- | ----------------------------------------- |
+| `void`  | `onClickHandler(): void`              | UI event handler (side-effect only)       |
+| `void`  | `logErrorToServer(msg: string): void` | Sends log, no return                      |
+| `never` | `throwError(msg: string): never`      | Used for throwing errors                  |
+| `never` | `exhaustiveSwitchCheck(value): never` | Type-safe fallthrough in `switch`         |
+| `never` | `while (true) {}`                     | Infinite loop (e.g., worker loop, daemon) |
+
+---
+
+##### ✅ Summary
+
+| Type   | Description                                  | Use For                          |
+|--------|----------------------------------------------|----------------------------------|
+| void   | Function returns no value                    | Logging, event handlers, side-effects |
+| never  | Function never returns (throws or loops)     | Error functions, infinite loops, exhaustiveness checking |
+
+
+- `void`: Indicates a function does not return a value (returns `undefined`).
+- `never`: Indicates a function never returns (throws an error or has an infinite loop).
+- Use `void` for functions that perform actions but don’t return anything.
+- Use `never` for functions that always throw or never finish executing.
+
+---
+
+##### 🧠 Exhaustiveness Checking with `never`
+
+> TypeScript can help you ensure that **all possible cases** are handled in a `switch` statement using the `never` type.
+**Exhaustiveness Checking with `never`** — one of the *smartest* TypeScript patterns, especially when working with **discriminated unions**.
+
+
+##### 🔷 Use Case: Discriminated Union
+
+```ts
+type Shape =
+  | { kind: "circle"; radius: number }
+  | { kind: "square"; size: number }
+  | { kind: "rectangle"; width: number; height: number };
+
+function getArea(shape: Shape): number {
+  switch (shape.kind) {
+    case "circle":
+      return Math.PI * shape.radius ** 2;
+    case "square":
+      return shape.size ** 2;
+    case "rectangle":
+      return shape.width * shape.height;
+
+    default:
+      return assertNever(shape); // Ensures all cases are handled
+  }
+}
+```
+
+---
+
+##### 🔐 `assertNever` Function
+
+```ts
+function assertNever(value: never): never {
+  throw new Error(`Unhandled case: ${JSON.stringify(value)}`);
+}
+```
+
+This helper ensures that if someone **adds a new variant** to `Shape`, and **forgets to update** the `switch`, TypeScript will throw a **compile-time error**.
+
+---
+
+##### ✅ Benefits
+
+* Catches missed cases early
+* Makes your code future-proof
+* Great for API models, UI state machines, and more
+
+---
+
+##### 🧱 Summary Brick
+
+| Pattern                     | Description                               |
+|-----------------------------|-------------------------------------------|
+| Exhaustive switch + never   | Ensures all union cases are handled       |
+| assertNever()               | Compile-time safety + runtime fallback    |
+
 
 ---
 
 #### **Function overloading**
-
 
 Function overloading lets you define **multiple function signatures** for a single function — each with different parameters or return types.
 
@@ -1057,9 +1181,7 @@ const u2 = getUser("Aziz");    // OK
 
 ---
 
-#### Rest Parameters in TypeScript
-
----
+#### **Rest Parameters in TypeScript**
 
 ##### 📦 Basic Example
 
@@ -1147,7 +1269,7 @@ log("info", "Server started", "on port", "3000");
 | Use case     | Logging, aggregation, APIs      | Flexible and clean              |
 
 
-#### Functional Methods with TypeScript
+#### Functional Array Methods with TypeScript
 
 ##### 🔁 map()
 
@@ -1195,6 +1317,72 @@ const sum: number = values.reduce((acc: number, cur: number): number => acc + cu
 
 ✅ You must specify **initial value** and make sure **types match**
 💡 `reduce` is powerful for building totals, transformations, even objects.
+
+---
+
+##### 🔁 forEach()
+
+Executes a function on each element — does **not** return anything.
+
+```ts
+const items = ["TS", "JS", "Node"];
+
+items.forEach((item: string): void => {
+  console.log("Tech:", item);
+});
+```
+
+✅ Use for side effects like logging or UI updates
+❌ Doesn’t modify or return a new array
+
+---
+
+##### 🔍 find()
+
+Returns the **first** matching element — or `undefined` if no match found.
+
+```ts
+type User = { id: number; name: string };
+const users: User[] = [
+  { id: 1, name: "Aziz" },
+  { id: 2, name: "Yahyaoui" }
+];
+
+const foundUser = users.find((u) => u.id === 1);
+
+if (foundUser) {
+  console.log("User found:", foundUser.name);
+}
+```
+
+✅ Result is type `User | undefined`
+🧠 Good candidate for type narrowing
+
+---
+
+##### ✅ some()
+
+Returns `true` if **at least one** element matches the condition.
+
+```ts
+const numbers = [1, 2, 3, 4];
+
+const hasEven = numbers.some((n) => n % 2 === 0); // true
+```
+
+✅ Great for quick validation
+
+---
+
+##### 📋 every()
+
+Returns `true` if **all** elements match the condition.
+
+```ts
+const allPositive = numbers.every((n) => n > 0); // true
+```
+
+✅ Useful for form validation, consistency checks, etc.
 
 ---
 
@@ -1246,11 +1434,211 @@ const lengths = mapArray(["Aziz", "DevOps", "TS"], (word) => word.length);
 
 ##### 🧱 Summary Brick
 
-| Method   | Purpose                  | Return Type | Notes                             |
-| -------- | ------------------------ | ----------- | --------------------------------- |
-| `map`    | Transform items          | `T[] → U[]` | Always returns same-length array  |
-| `filter` | Keep only matching items | `T[] → T[]` | Type-safe narrowing               |
-| `reduce` | Collapse to single value | `T[] → R`   | Powerful, flexible, tricky typing |
+
+| Method     | Purpose                        | Return Type       | Notes                                |
+|------------|--------------------------------|-------------------|--------------------------------------|
+| `map()`    | Transform items                | `T[] → U[]`       | Same length as original              |
+| `filter()` | Keep only matching items       | `T[] → T[]`       | Type-safe narrowing                  |
+| `reduce()` | Collapse to single value       | `T[] → R`         | Requires initial value               |
+| `forEach()`| Perform side effects           | `void`            | Doesn't return anything              |
+| `find()`   | Get first match                | `T | undefined`   | Use null checks or type guards       |
+| `some()`   | Check if any match             | `boolean`         | Returns true if at least one matches |
+| `every()`  | Check if all match             | `boolean`         | Returns true only if all match       |
+
+---
+
+
+#### More Functional and Typed Data Tools in TypeScript
+
+> `sort()`, `flatMap()`, `Set`, and `Map` 
+
+##### 🔀 sort()
+
+Sorts an array **in place** (modifies original array).
+
+```ts
+const scores: number[] = [85, 92, 70, 100];
+
+scores.sort((a, b) => a - b); // Ascending
+// [70, 85, 92, 100]
+
+scores.sort((a, b) => b - a); // Descending
+// [100, 92, 85, 70]
+```
+
+🧠 Default `sort()` compares values as **strings** — so always use a custom comparator for numbers or objects.
+
+---
+
+##### 🪄 sort() with Objects
+
+```ts
+type User = { id: number; name: string };
+
+const users: User[] = [
+  { id: 3, name: "Charlie" },
+  { id: 1, name: "Aziz" },
+  { id: 2, name: "Bob" }
+];
+
+users.sort((a, b) => a.id - b.id);
+// Sorted by ID: 1 → 2 → 3
+```
+
+---
+
+##### 🧩 flatMap()
+
+Combines `map()` and `flat()` in one step. Returns a **flattened array** after transformation.
+
+```ts
+const sentences = ["hello world", "typescript rocks"];
+
+const words = sentences.flatMap((s) => s.split(" "));
+// ["hello", "world", "typescript", "rocks"]
+```
+
+✅ Best when each mapped item returns an array
+✅ Prevents double loops or `.map(...).flat()`
+
+---
+
+##### 🧺 Set
+
+A **Set** stores **unique values only** — duplicates are automatically removed.
+
+```ts
+const ids = new Set<number>();
+
+ids.add(1);
+ids.add(2);
+ids.add(2); // Duplicate — ignored
+
+console.log(ids); // Set { 1, 2 }
+```
+
+* Use `has()`, `add()`, `delete()`, `size`
+* Great for deduplication and fast lookup
+
+---
+
+##### 🗺️ Map
+
+A **Map** stores key-value pairs (like objects) — but keys can be **any type**.
+
+```ts
+const userRoles = new Map<number, string>();
+
+userRoles.set(1, "Admin");
+userRoles.set(2, "User");
+
+console.log(userRoles.get(1)); // "Admin"
+```
+
+✅ Keeps insertion order
+✅ Use when keys aren’t just strings
+
+---
+
+##### 🧱 Summary Brick
+
+| Tool       | Description                              | Use Case                            |
+|------------|------------------------------------------|-------------------------------------|
+| sort()     | Sorts array in place                     | Numbers, strings, objects           |
+| flatMap()  | Maps + flattens                          | Exploding and transforming arrays   |
+| Set        | Stores unique values only                | Deduplication, existence checking   |
+| Map        | Key-value store with flexible key types  | Lookup tables, caching, associations|
+
+---
+
+#### Record, WeakMap, WeakSet in TypeScript
+
+---
+
+##### 🧾 `Record<K, V>`
+
+A **utility type** that constructs an object type with **keys of type `K`** and **values of type `V`**.
+
+```ts
+type UserRoles = Record<"admin" | "editor" | "guest", string>;
+
+const roles: UserRoles = {
+  admin: "Aziz",
+  editor: "Yahyaoui",
+  guest: "Anonymous"
+};
+```
+
+✅ Key-safe
+✅ Alternative to `{ [key: string]: value }`
+✅ Use when you **know all possible keys ahead of time**
+
+---
+
+##### 🔐 `WeakMap`
+
+A special kind of `Map` where:
+
+* **Keys must be objects**
+* **Entries don’t prevent garbage collection**
+
+```ts
+const obj1 = { id: 1 };
+const obj2 = { id: 2 };
+
+const secretData = new WeakMap<object, string>();
+
+secretData.set(obj1, "Top secret");
+secretData.set(obj2, "Classified");
+
+console.log(secretData.get(obj1)); // "Top secret"
+```
+
+✅ Keys are weakly held — auto-removed if object is no longer referenced
+🚫 Cannot iterate (no `.keys()`, `.values()`, etc.)
+
+---
+
+##### 🪶 `WeakSet`
+
+Like a `Set`, but:
+
+* Only holds **objects**
+* **Weakly references** them
+
+```ts
+const visitedObjects = new WeakSet<object>();
+
+const session = { token: "abc123" };
+visitedObjects.add(session);
+
+console.log(visitedObjects.has(session)); // true
+```
+
+✅ Useful for tracking objects without preventing GC
+✅ Non-enumerable
+🚫 No `.forEach()`, `.size`, or iteration
+
+---
+
+##### 🧠 Real-World Use Cases
+
+| Tool      | Use Case Example                                      |
+| --------- | ----------------------------------------------------- |
+| `Record`  | Role-based users, config maps, type-safe dictionaries |
+| `WeakMap` | Store metadata or private values tied to DOM objects  |
+| `WeakSet` | Marking visited nodes or cyclic references in memory  |
+
+---
+
+##### 🧱 Summary Brick
+
+
+| Tool      | Description                              | Keys              | Notes                              |
+|-----------|------------------------------------------|-------------------|------------------------------------|
+| `Record`  | Object type with known keys & values     | `string` or union | Type-safe object map               |
+| `WeakMap` | Map that holds object keys weakly        | object only       | Non-enumerable, GC-friendly        |
+| `WeakSet` | Set of objects held weakly               | object only       | No size, no iteration              |
 
 ---
 
@@ -1415,7 +1803,7 @@ type ID = string | number;
 type Coord = { x: number } & { y: number };
 ```
 
-#### Generics
+### Generics
 ```typescript
 function identity<T>(arg: T): T {
   return arg;
@@ -1431,7 +1819,7 @@ class Box<T> {
 }
 ```
 
-#### Utility Types
+### Utility Types
 ```typescript
 type PartialUser = Partial<User>;  // All properties optional
 type ReadonlyUser = Readonly<User>;
@@ -1439,7 +1827,7 @@ type UserPreview = Pick<User, "id" | "username">;
 type UserWithoutId = Omit<User, "id">;
 ```
 
-#### Type Guards
+### Type Guards
 ```typescript
 // Type predicate
 function isString(value: unknown): value is string {
@@ -1583,6 +1971,7 @@ function anotherFunction() {
 ---
 
 ## Common Errors
+
 | Error Message                          | Solution                          |
 |----------------------------------------|-----------------------------------|
 | **Object is possibly 'null'**          | Use optional chaining (`?.`)      |
@@ -1594,3 +1983,94 @@ function anotherFunction() {
 ---
 
 **Pro Tip**: Always use the [TypeScript Playground](https://www.typescriptlang.org/play) to experiment with types!
+
+
+# Funny notes:
+
+- Me:
+> I think I've got function arrow fever😅😅. I utilize it everywhere, even with overload function signatures. Is that right??
+
+- ChatGpt:
+> 🤣 Ah yes — welcome to the **arrow function fever club**, my guy!
+You're not alone — it's clean, fast, expressive... but when it comes to **function overloading**, there’s a catch 🪤.
+
+---
+
+## 🧠 Can You Use Overloads with Arrow Functions?
+
+### 🔴 Technically: **No**, not directly.
+
+**Function overloading only works with regular (named) functions**, not with arrow functions.
+
+---
+
+### 🧪 Let’s Compare
+
+#### ✅ Overload with Regular Function — ✅ Works
+
+```ts
+function greet(name: string): string;
+function greet(name: string, age: number): string;
+
+function greet(name: string, age?: number): string {
+  return age ? `Hello ${name}, age ${age}` : `Hello ${name}`;
+}
+```
+
+---
+
+#### ❌ Overload with Arrow Function — ❌ Not Supported
+
+```ts
+// ❌ This will cause an error in TS
+
+const greet = (name: string): string;
+const greet = (name: string, age: number): string;
+
+const greet = (name: string, age?: number): string => {
+  return age ? `Hello ${name}, age ${age}` : `Hello ${name}`;
+};
+```
+
+TypeScript will scream:
+
+> **"Cannot redeclare block-scoped variable 'greet'"**
+
+---
+
+## ✅ Workaround: Use a Function Type + One Arrow Function
+
+You can **define the overloaded signature separately**, and assign it to a typed arrow function:
+
+```ts
+type GreetFn = {
+  (name: string): string;
+  (name: string, age: number): string;
+};
+
+const greet: GreetFn = (name: string, age?: number): string => {
+  return age ? `Hello ${name}, age ${age}` : `Hello ${name}`;
+};
+```
+
+✅ This works
+✅ Keeps the arrow style
+✅ Keeps overload support
+
+---
+
+## 🧠 Why Arrow Can't Be Overloaded?
+
+Because arrow functions are **values**, not declarations. Overloading works with function declarations that the compiler merges together.
+
+---
+
+### 🧱 TL;DR Brick
+
+| Style                | Supports Overloading?  | Notes                                  |
+| -------------------- | ---------------------- | -------------------------------------- |
+| Regular function     | ✅ Yes                  | Recommended for multiple signatures    |
+| Arrow function       | ❌ No                   | Use `type` + single impl workaround    |
+| Typed arrow w/ alias | ✅ Yes (via type alias) | Best of both worlds if you love arrows |
+
+---

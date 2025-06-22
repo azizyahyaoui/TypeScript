@@ -53,7 +53,6 @@ console.log("------------------- Arrow Functions in TypeScript -----------------
 const addArrow = (num1: number, num2: number): number => num1 + num2;
 console.log("Sum of 5 and 10 using arrow function is: " + addArrow(5, 10));
 
-
 // function with optional parameters
 console.log("------------------- Function with Optional Parameters -------------------");
 const greetOptional = (name: string, age?: number): string => {
@@ -76,3 +75,36 @@ type MathOperation = (num1: number, num2: number) => number;
 const subtract: MathOperation = (num1, num2) => num1 - num2;
 console.log("Subtraction of 10 and 5 is: " + subtract(10, 5));
 
+// Anonymous Functions
+console.log("------------------- Anonymous Functions -------------------");
+const divide = (num1: number, num2: number): number => {
+  if (num2 === 0) {
+    throw new Error("Cannot divide by zero");
+  }
+  return num1 / num2;
+}
+
+console.log("Division of 10 by 2 is: " + divide(10, 2));
+
+// Anonymous function and callbacks
+console.log("------------------- Anonymous Functions and Callbacks -------------------"); 
+/** 
+ * Callbacks are functions that are passed as arguments to other functions.
+ * They are executed after the completion of the function they are passed to.
+*/
+
+//real world example of callback function
+const fetchData = (url: string, callback: (data: string) => void): void => {
+  // Simulating an API call
+  setTimeout(() => {
+    // passing data to json string
+    const data = JSON.stringify({ url: url, message: "Data fetched successfully!" });
+    console.log("Data fetched from: " + url);
+
+    callback(data);
+  }, 1000);
+}
+
+fetchData("https://api-example.com", (data) => {
+  console.log("Received data: " + data);
+});
