@@ -476,11 +476,98 @@ npm create vite@latest
 
 ---
 
+##  **Before starting common landmines**
+
+> I think before entering the TS world, you should know **common landmines** ESLint catches, especially those related to **globals** and tricky behaviors in JS/TS.
+
+Here are some sneaky ones ESLint will often warn or error about:
+
+---
+
+### 🔥 **Global Identifiers (Especially in Browsers)**
+
+These are **built-in browser globals** that can silently override or get overridden:
+
+| Identifier                | Description                                                                |
+| ------------------------- | -------------------------------------------------------------------------- |
+| `name`                    | Refers to `window.name`                                                    |
+| `event`                   | Refers to the global `event` object in some browsers (e.g., during events) |
+| `length`                  | Can conflict with `arguments.length` or array-like objects                 |
+| `status`                  | Refers to `window.status` (now mostly deprecated)                          |
+| `location`                | Refers to `window.location`                                                |
+| `top`, `parent`           | Refer to frame/window hierarchy                                            |
+| `self`                    | Refers to `window.self`                                                    |
+| `history`                 | Refers to `window.history`                                                 |
+| `navigator`               | Refers to browser details like `navigator.userAgent`                       |
+| `onload`, `onclick`, etc. | Built-in browser event handler properties                                  |
+
+#### 🚫 ESLint rule: `"no-restricted-globals"`
+
+If enabled, this rule will catch these and say something like:
+
+> `'event' is a restricted global variable. Use a local variable instead.`
+
+---
+
+### 💥 Other JavaScript / TypeScript Pitfalls ESLint Covers
+
+#### 1. **Shadowed Variables**
+
+```ts
+let count = 1;
+function foo() {
+  let count = 2; // ⚠️ May trigger `no-shadow`
+}
+```
+
+#### 2. **Implicit `any`**
+
+If using `@typescript-eslint/no-explicit-any` or `noImplicitAny` in `tsconfig.json`:
+
+```ts
+function greet(name) {
+  console.log("Hello " + name); // ❌ Parameter has implicit 'any' type
+}
+```
+
+#### 3. **Unused Variables**
+
+```ts
+const result = calculate(); // if not used, triggers `no-unused-vars`
+```
+
+#### 4. **Unawaited Promises**
+
+With async functions:
+
+```ts
+fetchData(); // ❌ ESLint may say: "Promise returned is not handled"
+```
+
+#### 5. **Console usage**
+
+Some configs treat `console.log()` as a code smell:
+
+```ts
+console.log("Debugging"); // ⚠️ via `no-console`
+```
+
+---
+
+### ✅ Quick Fixes
+
+* Rename identifiers like `name`, `event`, `status` → `userName`, `e`, `statusCode`
+* Avoid using global-sounding names in the **global scope**
+* Enable TypeScript's `strict` mode and let ESLint/TS do the rest
+* Use local scope over global scope as much as possible
+
+---
+
 ## TypeScript Syntax
 
 ### **Primitive Types**
 
-```typescript
+```ts
 
 let isAuth: boolean = false;
 let isAdmin: boolean = true;
@@ -729,6 +816,15 @@ enum FilePermission {
 // You can combine flags:
 let perms = FilePermission.Read | FilePermission.Write;
 ```
+#### 📌 Summary Table
+
+| Feature         | Numeric Enum                    | String Enum                     |
+| --------------- | ------------------------------- | ------------------------------- |
+| Values          | Auto-assigned numbers (`0,1,2`) | Manually-assigned strings       |
+| Reverse Mapping | ✅ Yes                           | ❌ No                            |
+| Readability     | ❌ Less readable                 | ✅ More readable                 |
+| Use case        | Internal flags, bitmasks        | API roles, DB values, UI labels |
+
 
 ---
 
