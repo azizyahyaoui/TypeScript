@@ -388,6 +388,94 @@ This approach helps keep your configurations modular and focused on specific asp
 
 ---
 
+## **⚡ Using Vite with Vanilla TypeScript (Instead of `tsc`)**
+
+For modern web projects, you can use [Vite](https://vitejs.dev/) to replace `tsc` and get:
+
+- Instant dev server with hot reload 🔥
+- TypeScript support out of the box
+- Zero setup required
+
+### 🚀 Why This Is a Great Addition
+
+✅ **Beginner-friendly** — No config hell, instant feedback
+✅ **Fast HMR** — You get live reloading *with no setup*
+✅ **Scalable** — Can evolve into React, Vue, or Svelte later
+✅ **Cleaner dev loop** — No need to run `tsc --watch`, Vite handles everything
+
+It's perfect for learners *and* pros.
+
+### ✅ Quick Setup
+
+```bash
+npm create vite@latest
+# Choose: Vanilla → TypeScript
+cd your-project-name
+npm install
+npm run dev
+```
+
+💥 You now have a blazing-fast dev server with TypeScript support — no manual config needed.
+
+---
+
+### 📁 Typical Vite + TS Structure
+
+```
+vite-ts-project/
+├── index.html
+├── main.ts
+├── style.css
+├── tsconfig.json
+└── vite.config.ts
+```
+
+* `main.ts` is your entry point
+* TypeScript compiles on-the-fly using Vite’s dev server
+* No need to run `tsc` manually
+
+---
+
+### 🔄 Build Production Code
+
+```bash
+npm run build
+```
+
+* Vite uses `esbuild` under the hood = ultra-fast bundling
+* Output goes to `/dist` folder
+
+---
+
+### 🧱 When to Use Vite
+
+| Use Case                     | Use Vite?                         |
+| ---------------------------- | --------------------------------- |
+| Learning TS + DOM            | ✅                                 |
+| Building fast frontend tools | ✅                                 |
+| React/Vue/Svelte projects    | ✅                                 |
+| Backend-only or CLI tools    | ❌ Use `tsc`, `tsup`, or `ts-node` |
+
+---
+
+### 🧠 Pro Tip
+
+If you only want to **learn TypeScript without a bundler**, stick with:
+
+```bash
+tsc --watch
+```
+
+But if you're building UI or DOM-heavy projects:
+
+```bash
+npm create vite@latest
+```
+
+✨ Vite gives you the full experience, instantly.
+
+---
+
 ## TypeScript Syntax
 
 ### **Primitive Types**
