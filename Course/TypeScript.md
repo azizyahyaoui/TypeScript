@@ -76,6 +76,23 @@ This will generate an equivalent JavaScript file (`example.js`).
 ```bash
 node example.ts
 ```
+```plaintext
++---------------------------+    +---------------------------+    +---------------------+
+|                           |    |                           |    |                     |
+|  Typescript File          |    |  Typescript Compiler      |    |  Javascript Code    |
+|  (.ts or .tsx)            | -> |  Compilation/Transpiling  | -> |  (.js)              |
+|                           |    |                           |    |                     |
+|  Annotations, Types,      |    |                           |    |  Runs Everywhere    |
+|  Generics                 |    |                           |    |                     |
++---------------------------+    +---------------------------+    +---------------------+
+                                                                 |
+                                                                 v
+                                                     +---------------------+
+                                                     |                     |
+                                                     |  Vanilla JS Code    |
+                                                     |                     |
+                                                     +---------------------+
+```
 
 ### tsconfig.json
 
@@ -202,6 +219,8 @@ The `tsconfig.json` file is a JSON file that contains various compiler options a
     ```json
     "removeComments": true
     ```
+11. **`tsc --watch`**
+  > If you want to auto-recompile on save with tsc --watch 
 
 #### `include` and `exclude`
 These settings control which files are included in the project and which are excluded.
@@ -1551,7 +1570,7 @@ console.log(userRoles.get(1)); // "Admin"
 
 ---
 
-### Record, WeakMap, WeakSet in TypeScript
+### Record, WeakMap, WeakSet collection in TypeScript
 
 ##### 🧾 `Record<K, V>`
 
@@ -1965,6 +1984,82 @@ function anotherFunction() {
 > TypeScript modules are always in strict mode, so you don't need to explicitly declare `"use strict";` in your TypeScript files. The TypeScript compiler will automatically insert the strict mode directive when it transpiles TypeScript to JavaScript.
 
 > However, if you're working with plain JavaScript or older JavaScript code, adding `"use strict";` can help catch errors early and enforce a cleaner coding style.
+
+---
+
+## **⚙️ Watch Mode & Live Compilation**
+
+TypeScript supports file watching via the CLI using:
+
+```bash
+tsc --watch
+```
+
+This enables automatic recompilation on save using your `tsconfig.json`.
+
+---
+
+### 🔄 Better Dev Loop with `ts-node-dev`
+
+For projects that run TypeScript files (e.g., backend/server), use:
+
+```bash
+npm install --save-dev ts-node-dev
+```
+
+Then add this to your `package.json`:
+
+```json
+"scripts": {
+  "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
+}
+```
+
+#### ✅ What it does:
+
+* 🚀 Runs TypeScript **without precompiling**
+* 🔄 **Watches for changes** and reloads automatically
+* ⚡ **Fast restarts** (no file system lag)
+* 🧠 `--transpile-only` skips type-checking for speed
+
+---
+
+### 💡 ts-node vs ts-node-dev vs tsc
+
+| Tool          | Description                               | Live Reload?       | Type Checks?  |
+| ------------- | ----------------------------------------- | ------------------ | ------------- |
+| `tsc`         | Compiles TS to JS                         | ✅ (with `--watch`) | ✅             |
+| `ts-node`     | Runs `.ts` files directly (no build step) | ❌                  | ✅             |
+| `ts-node-dev` | Like nodemon for TypeScript               | ✅                  | ❌ (for speed) |
+
+---
+
+### 🛡️ Optional: Keep Type Checks Too
+
+If you want **type checking** and **live reload** in dev:
+
+* Use `tsc --watch` in one terminal
+* And `nodemon dist/index.js` in another
+
+OR try:
+
+```bash
+npm install --save-dev tsup
+```
+
+```bash
+npx tsup src/index.ts --watch --onSuccess "node dist/index.js"
+```
+
+---
+
+### 🧱 TL;DR
+
+| Tool          | Use When...                          |
+| ------------- | ------------------------------------ |
+| `tsc --watch` | You want TS to compile automatically |
+| `ts-node-dev` | You’re running dev servers/scripts   |
+| `tsup`        | You want fast builds + watch combo   |
 
 ---
 
