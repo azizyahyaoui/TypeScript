@@ -1,0 +1,147 @@
+// Interfaces in TypeScript
+/**
+ * 
+ * Interfaces are used to define the structure of an object, including its properties and methods.
+ * They are a powerful way to enforce type safety and ensure that objects conform to a specific shape.
+ * Interfaces can be used to define the shape of objects, classes, and function signatures.
+ * They can also be extended to create new interfaces that inherit properties from existing ones.
+ * 
+| Feature              | Syntax                       | Use Case                         |
+|----------------------|------------------------------|----------------------------------|
+| Object shape         | `interface User {}`          | Enforce object structure         |
+| Optional field       | `email?: string`             | Fields that may be missing       |
+| Readonly field       | `readonly id: number`        | Prevent mutation                 |
+| Extending interface  | `interface A extends B`      | Reuse + extend base structures   |
+| Implements in class  | `class X implements Y`       | Class shape contract             |
+| Function signature   | `interface Fn { (): R }`     | Callbacks or APIs                |
+ */
+
+
+// basic interface
+
+interface User {
+  readonly id: number; // readonly field
+  name: string;
+  email?: string; // optional field
+  age: number | null;
+  isActive: boolean;
+  createdAt: Date;
+  role: "admin" | "user" | "guest";
+};
+
+const Aziz: User = {
+  id: 1,
+  name: "Aziz",
+  email: "azizz@email.xyz",
+  age: 25,
+  isActive: true,
+  createdAt: new Date(),
+  role: "admin",
+
+};
+
+const Bilel: User = {
+  id: 2,
+  name: "Bilel",
+  age: 25,
+  isActive: true,
+  createdAt: new Date(),
+  role: "user",
+};
+
+
+
+
+// Extending interfaces
+interface AdminUser extends User {
+  permissions: string[];
+}
+
+const admin: AdminUser = {
+  id: 3,
+  name: "Admin User",
+  email: "admin@email.com",
+  age: 30,
+  isActive: true,
+  createdAt: new Date(),
+  role: "admin",
+  permissions: ["read", "write", "delete"],
+};
+
+
+// Function using interface
+console.log("---------------------- Interfaces with Functions ----------------------");
+const createUser = (user: User): User => {
+  console.log(`User created: ${user.name}`);
+  return user;
+}
+createUser(Aziz);
+console.log(Aziz)
+createUser(Bilel);
+console.log(Bilel);
+// Function using extended interface
+console.log("---------------------- Interfaces with Extended Types ----------------------");
+const createAdminUser = (admin: AdminUser): AdminUser => {
+  console.log(`Admin User created: ${admin.name}`);
+  return admin;
+}
+createAdminUser(admin);
+console.log(admin);
+
+// Example of using interfaces with classes
+console.log("---------------------- Interfaces with Classes ----------------------");
+interface IUser {
+  id: number;
+  name: string;
+  email?: string;
+  age: number | null;
+  isActive: boolean;
+  createdAt: Date;
+  displayInfo(): void;
+}
+
+class UserClass implements IUser {
+  id: number;
+  name: string;
+  email?: string;
+  age: number | null;
+  isActive: boolean;
+  createdAt: Date;
+
+  constructor(id: number, name: string, email: string | undefined, age: number | null, isActive: boolean) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+    this.age = age;
+    this.isActive = isActive;
+    this.createdAt = new Date();
+  }
+
+  displayInfo(): void {
+    console.log(`User Info - ID: ${this.id}, Name: ${this.name}, Email: ${this.email}, Age: ${this.age}, Active: ${this.isActive}`);
+  }
+}
+
+const user1 = new UserClass(1, "Alice", "alice@gmail.com", 28, true);
+user1.displayInfo();
+const user2 = new UserClass(2, "Bob", undefined, null, false);
+user2.displayInfo();
+
+// Interfaces with Functions signatures
+console.log("---------------------- Interfaces with Function Signatures ----------------------");
+
+interface StringFormatter {
+  (input: string): string;
+}
+
+const toUpperCase: StringFormatter = (input: string): string => {
+  return input.toUpperCase();
+}
+const toLowerCase: StringFormatter = (input: string): string => {
+  return input.toLowerCase();
+}
+const formatString = (formatter: StringFormatter, input: string): string => {
+  return formatter(input);
+}
+console.log(formatString(toUpperCase, "hello world"));
+console.log(formatString(toLowerCase, "HELLO WORLD"));
