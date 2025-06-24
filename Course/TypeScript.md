@@ -1847,7 +1847,7 @@ console.log(visitedObjects.has(session)); // true
 
 > **Interfaces in TypeScript** — one of the cleanest and most powerful ways to define the **shape of your data**, especially for objects, APIs, and class contracts.
 
-### ✅ Basic Interface
+#### ✅ Basic Interface
 
 ```ts
 interface User {
@@ -1868,7 +1868,7 @@ const user: User = {
 
 ---
 
-### 🔹 Optional Properties
+#### 🔹 Optional Properties
 
 ```ts
 interface Profile {
@@ -1881,7 +1881,7 @@ Use `?` to mark properties as optional.
 
 ---
 
-### 🔒 Readonly Properties
+#### 🔒 Readonly Properties
 
 ```ts
 interface Account {
@@ -1895,7 +1895,7 @@ interface Account {
 
 ---
 
-### 🧬 Extending Interfaces (Inheritance)
+#### 🧬 Extending Interfaces (Inheritance)
 
 ```ts
 interface Admin extends User {
@@ -1915,7 +1915,7 @@ const admin: Admin = {
 
 ---
 
-### 🧠 Interface vs Type
+#### 🧠 Interface vs Type
 
 | Feature       | `interface`         | `type`                     |
 | ------------- | ------------------- | -------------------------- |
@@ -1930,7 +1930,7 @@ const admin: Admin = {
 
 ---
 
-### 🧪 Interfaces with Functions
+#### 🧪 Interfaces with Functions
 
 ```ts
 interface GreetFn {
@@ -1945,7 +1945,7 @@ const greet: GreetFn = (name) => `Hello, ${name}`;
 
 ---
 
-### 🎓 Interfaces with Classes
+#### 🎓 Interfaces with Classes
 
 ```ts
 interface Animal {
@@ -1965,7 +1965,7 @@ class Dog implements Animal {
 
 ---
 
-### 🧱 Summary Brick
+#### 🧱 Summary Brick
 
 
 | Feature              | Syntax                       | Use Case                         |
