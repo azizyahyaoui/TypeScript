@@ -563,7 +563,7 @@ console.log("Debugging"); // ⚠️ via `no-console`
 
 ---
 
-## TypeScript Syntax
+## **TypeScript Syntax**
 
 ### **Primitive Types**
 
@@ -778,7 +778,7 @@ let role: UserRoleType = "Admin";
 
 ---
 
-#### 🔥 Pro Combo: Const Object + Literal Inference
+#### 🔥Combo: Const Object + Literal Inference
 
 ```ts
 const UserRole = {
@@ -1754,7 +1754,7 @@ console.log(userRoles.get(1)); // "Admin"
 
 ---
 
-### Record, WeakMap, WeakSet collection in TypeScript
+### **Record, WeakMap, WeakSet collection in TypeScript**
 
 ##### 🧾 `Record<K, V>`
 
@@ -1924,7 +1924,7 @@ const admin: Admin = {
 - Prefer interfaces for public APIs and class contracts; use types for advanced type features.
 
 
-### **The `type` Keyword in TypeScript**
+### **The `type` Keyword in TypeScript: Aliases**
 
 The `type` keyword in TypeScript is used to create **type aliases**—custom names for existing types. Type aliases improve code readability, reusability, and maintainability, and can represent anything from primitives to complex structures.
 
@@ -1998,11 +1998,61 @@ type PartialUser = Optional<User>; // { id?: number; name?: string; }
 In simple cases, both are interchangeable for objects, but `type` is more versatile for advanced scenarios.
 
 
-### Union & Intersection
+### **Union & Intersection Types**
+
+> TypeScript provides **union** and **intersection** types to create flexible and expressive type definitions.
+
+---
+
+#### **Union Types (`|`)**
+
+A **union type** allows a value to be **one of several types**.
+
 ```typescript
 type ID = string | number;
-type Coord = { x: number } & { y: number };
+
+let userId: ID;
+userId = "abc123"; // OK
+userId = 42;       // OK
+// userId = true;  // ❌ Error: boolean not allowed
 ```
+
+- Use unions when a variable can be more than one type.
+- Common for IDs, API responses, or flexible function parameters.
+
+---
+
+#### **Intersection Types (`&`)**
+
+An **intersection type** combines multiple types into **one**. The resulting type has **all properties** from each type.
+
+```typescript
+type CoordX = { x: number };
+type CoordY = { y: number };
+type Coord = CoordX & CoordY;
+
+const point: Coord = { x: 10, y: 20 }; // Must have both x and y
+```
+
+- Use intersections to compose types, especially for objects that must satisfy multiple contracts.
+
+---
+
+#### **Summary Table**
+
+| Type            | Syntax        | Description                                  | Example                        |
+|-----------------|---------------|----------------------------------------------|--------------------------------|
+| Union           | `A &#124; B`  | Value can be type A **or** type B            | `type ID = string &#124; number` |
+| Intersection    | `A & B`       | Value must satisfy **all** combined types    | `type Coord = {x} & {y}`        |
+
+---
+
+#### **When to Use**
+
+- **Union**: When a value can be one of several types (e.g., `"success" | "error"`, `string | number`).
+- **Intersection**: When you want to combine multiple type requirements into one (e.g., mixins, multiple interfaces).
+
+---
 
 ### Generics
 ```typescript
@@ -2028,18 +2078,117 @@ type UserPreview = Pick<User, "id" | "username">;
 type UserWithoutId = Omit<User, "id">;
 ```
 
-### Type Guards
-```typescript
-// Type predicate
+### **Type Guards**
+
+> A **Type Guard** in TypeScript is a way to **narrow down a variable’s type** so the compiler knows exactly what you're dealing with at runtime.
+
+> Think of it as a **type bouncer** at the door of your logic:
+  > “Hold up! Only strings beyond this line. No unknowns allowed.”
+
+#### 🔐 What is a Type Guard?
+
+It's a **runtime check** that confirms the **actual type** of a variable — so you can safely access properties/methods without getting type errors.
+
+#### ✅ Common Type Guards
+
+##### 1. `typeof` – for primitives
+
+```ts
+function printLength(value: unknown) {
+  if (typeof value === "string") {
+    // ✅ value is now treated as string
+    console.log(value.length);
+  }
+}
+```
+##### 2. `instanceof` – for class instances
+
+```ts
+class Animal {
+  speak() { console.log("woof"); }
+}
+
+class Car {
+  drive() { console.log("vroom"); }
+}
+
+function useThing(thing: Animal | Car) {
+  if (thing instanceof Animal) {
+    thing.speak(); // ✅ type is Animal
+  } else {
+    thing.drive(); // ✅ type is Car
+  }
+}
+```
+##### 3. Custom Type Guard (Type Predicate)
+
+This is 🔥 powerful — lets you define your own check.
+
+```ts
 function isString(value: unknown): value is string {
   return typeof value === "string";
 }
 
+function logValue(value: unknown) {
+  if (isString(value)) {
+    // ✅ value is string here
+    console.log(value.toUpperCase());
+  }
+}
+```
+
+* Notice `value is string` → this is the **type predicate**
+* TypeScript narrows the type if the function returns `true`
+
+##### 4. Discriminated Unions
+
+Perfect with `switch` + `never`
+
+```ts
 // Discriminated Union
-type Shape = 
+type Shape =
   | { kind: "circle"; radius: number }
   | { kind: "square"; size: number };
+
+function area(shape: Shape) {
+  switch (shape.kind) {
+    case "circle":
+      return Math.PI * shape.radius ** 2;
+    case "square":
+      return shape.size ** 2;
+  }
+}
 ```
+✅ TS automatically narrows `shape` to the correct type based on the `kind` field.
+
+#### 5. **Equality Narrowing**
+Using `===`, `!==`, `==`, or `!=` checks.
+
+```typescript
+function example(x: string | number, y: string | boolean) {
+  if (x === y) {
+    // Both x and y are strings here
+    x.toUpperCase();
+    y.toLowerCase();
+  }
+}
+```
+
+#### Why Use Type Guards?
+
+1. **Type Safety**: Ensures you only access properties/methods that exist on the narrowed type
+2. **Better Autocompletion**: IDEs provide accurate suggestions based on narrowed types
+3. **Runtime Validation**: Combines compile-time checks with runtime verification
+4. **Cleaner Code**: Avoids excessive type assertions (`as` syntax)
+
+#### 🧱 Summary Brick
+
+| Type Guard          | Use For                   | Example                     |
+| ------------------- | ------------------------- | --------------------------- |
+| `typeof`            | Primitives                | `typeof value === "string"` |
+| `instanceof`        | Class instances           | `if (a instanceof MyClass)` |
+| Custom predicate    | Complex checks / unknown  | `value is string`           |
+| Discriminated union | Objects with shared field | `switch (obj.kind)`         |
 
 ---
 
