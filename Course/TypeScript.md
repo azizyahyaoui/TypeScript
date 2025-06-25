@@ -2273,6 +2273,8 @@ dog.move(10);
 
 ## **Tips to start with And Best Practices**
 
+### Tips to start:
+
 1. **Enable Strict Mode**: Always set `"strict": true`. This enforces best practices and helps catch potential errors early.
 
 2. **Avoid `any`**: Use `unknown` with type guards
@@ -2302,14 +2304,14 @@ dog.move(10);
    npm install --save @types/lodash
    ```
 
-### Benefits of Strict Mode
+#### Benefits of Strict Mode
 1. **Eliminates Some JavaScript Silent Errors**: By changing them to throw errors.
 2. **Fixes Mistakes That Make It Difficult for JavaScript Engines to Perform Optimizations**: By eliminating some silent errors, strict mode can sometimes lead to improved performance.
 3. **Prohibits Some Syntax Likely to Be Defined in Future Versions of ECMAScript**: This prevents code from breaking in the future.
 
-### Examples of Strict Mode
+#### Examples of Strict Mode
 
-#### Enabling Strict Mode
+##### Enabling Strict Mode
 ```javascript
 "use strict";
 function myFunction() {
@@ -2323,7 +2325,7 @@ function anotherFunction() {
 }
 ```
 
-#### Key Differences in Strict Mode
+##### Key Differences in Strict Mode
 
 1. **Variables Must Be Declared Before Use**:
    ```javascript
@@ -2368,10 +2370,171 @@ function anotherFunction() {
    myFunction();
    ```
 
-### Using Strict Mode in TypeScript
+#### Using Strict Mode in TypeScript
 > TypeScript modules are always in strict mode, so you don't need to explicitly declare `"use strict";` in your TypeScript files. The TypeScript compiler will automatically insert the strict mode directive when it transpiles TypeScript to JavaScript.
 
 > However, if you're working with plain JavaScript or older JavaScript code, adding `"use strict";` can help catch errors early and enforce a cleaner coding style.
+
+---
+
+### When: `interface` vs `type`
+
+> In TypeScript, both `type` and `interface` can be used to define the shape of data, but they have different strengths and best-use scenarios. Here's a clear breakdown to help you decide **when to use each** as a best practice:
+
+#### ✅ Use `interface` when:
+
+1. **You are defining the shape of an object or a class.**
+
+   ```ts
+   interface User {
+     id: number;
+     name: string;
+   }
+   ```
+
+2. **You expect to extend or implement it.**
+
+   * Interfaces are made for extension and implementation.
+
+   ```ts
+   interface Person {
+     name: string;
+   }
+
+   interface Employee extends Person {
+     id: number;
+   }
+
+   class Developer implements Employee {
+     name: string;
+     id: number;
+     constructor(name: string, id: number) {
+       this.name = name;
+       this.id = id;
+     }
+   }
+   ```
+
+3. **You want better performance and readability in IDEs.**
+
+   * Interfaces are slightly more optimized for tools like VS Code.
+
+---
+
+#### ✅ Use `type` when:
+
+1. **You need to represent unions, intersections, or tuples.**
+
+   ```ts
+   type Status = "success" | "error" | "loading";
+   type Point = [number, number];
+   type Result<T> = T | Error;
+   ```
+
+2. **You are composing complex types.**
+
+   * `type` is more flexible for advanced types.
+
+   ```ts
+   type User = {
+     name: string;
+   };
+   type Admin = User & {
+     admin: true;
+   };
+   ```
+
+3. **You want to alias a primitive or utility type.**
+
+   ```ts
+   type ID = string | number;
+   type Callback = () => void;
+   ```
+
+---
+
+#### ❗Avoid overusing `type` to replace everything.
+
+While `type` is more powerful in some cases, interfaces are semantically better when dealing with **object shapes and class contracts**. Stick with `interface` unless you **need** the features of `type`.
+
+---
+
+#### 💡 Best Practice Summary:
+
+| Use Case                      | Use `interface` | Use `type` |
+| ----------------------------- | --------------- | ---------- |
+| Object/class structure        | ✅               | ✅          |
+| Extendable/implementable      | ✅               | ❌          |
+| Union/intersection types      | ❌               | ✅          |
+| Tuples or function signatures | ❌               | ✅          |
+| Primitive/utility type alias  | ❌               | ✅          |
+
+---
+
+### 📘 TypeScript: `export` vs `export default` & Interface Export Best Practice
+
+#### 🔹 `export` vs `export default`
+
+| Feature                     | `export` (Named)                           | `export default`                                     |
+| --------------------------- | ------------------------------------------ | ---------------------------------------------------- |
+| 🔧 Purpose                  | Export multiple values by name             | Export a single "main" value                         |
+| 🧠 Import Style             | `import { something } from "./file"`       | `import something from "./file"`                     |
+| ✍️ Auto-Complete & Refactor | ✅ IDE-friendly with auto-imports           | ⚠️ Slightly less IDE-friendly                        |
+| 💥 Multiple Exports?        | Yes, unlimited                             | Only **one** default export per file                 |
+| ⚙️ Use Case                 | Utility functions, shared constants, types | Config object, main class/function, default behavior |
+
+##### ✅ Rule of Thumb:
+
+> Use **named exports** (`export`) for utility-heavy modules
+> Use **default export** when the file has **one primary export**
+
+---
+
+#### 🧾 Interface Export Best Practice
+
+##### 🚫 Avoid This Style:
+
+```ts
+export default interface DeviceInter {
+  // ...
+}
+```
+
+* While valid, this is **less readable** and discouraged in many style guides.
+* Not ideal for hover info, refactoring, or TS declaration files (`.d.ts`).
+
+---
+
+##### ✅ Preferred Style:
+
+```ts
+interface DeviceInter {
+  // ...
+}
+
+export default DeviceInter;
+```
+
+* Keeps your interface **clean and readable**.
+* Aligns with declaration file standards and best practices.
+
+---
+
+##### ✅ Or, When Using Named Exports:
+
+```ts
+export interface DeviceInter {
+  // ...
+}
+```
+
+Great if you want to export multiple interfaces or types from the same file.
+
+---
+
+#### 🧘 Nyro's Pro Tip:
+
+> “Keep your types clean, and your exports separate — like good code and good coffee.”
 
 ---
 

@@ -1,20 +1,20 @@
-// Interfaces in TypeScript
 /**
+ * Interfaces in TypeScript
  * 
- * Interfaces are used to define the structure of an object, including its properties and methods.
- * They are a powerful way to enforce type safety and ensure that objects conform to a specific shape.
- * Interfaces can be used to define the shape of objects, classes, and function signatures.
- * They can also be extended to create new interfaces that inherit properties from existing ones.
+ * Interfaces define the structure of objects, classes, or functions.
+ * They enforce type safety and ensure consistency across implementations.
+ * Interfaces can be extended to build complex shapes from simpler ones.
  * 
-| Feature              | Syntax                       | Use Case                         |
-|----------------------|------------------------------|----------------------------------|
-| Object shape         | `interface User {}`          | Enforce object structure         |
-| Optional field       | `email?: string`             | Fields that may be missing       |
-| Readonly field       | `readonly id: number`        | Prevent mutation                 |
-| Extending interface  | `interface A extends B`      | Reuse + extend base structures   |
-| Implements in class  | `class X implements Y`       | Class shape contract             |
-| Function signature   | `interface Fn { (): R }`     | Callbacks or APIs                |
+ * | Feature              | Syntax                       | Use Case                         |
+ * |----------------------|------------------------------|----------------------------------|
+ * | Object shape         | `interface User {}`          | Enforce object structure         |
+ * | Optional field       | `email?: string`             | Fields that may be missing       |
+ * | Readonly field       | `readonly id: number`        | Prevent mutation                 |
+ * | Extending interface  | `interface A extends B`      | Reuse + extend base structures   |
+ * | Implements in class  | `class X implements Y`       | Class shape contract             |
+ * | Function signature   | `interface Fn { (): R }`     | Callbacks or function contracts  |
  */
+
 
 
 // basic interface
@@ -48,8 +48,6 @@ const Bilel: User = {
   createdAt: new Date(),
   role: "user",
 };
-
-
 
 
 // Extending interfaces
@@ -98,6 +96,9 @@ interface IUser {
   isActive: boolean;
   createdAt: Date;
   displayInfo(): void;
+  // method with parameter
+  getIsActive:(message:string)=>string;
+
 }
 
 class UserClass implements IUser {
@@ -120,12 +121,19 @@ class UserClass implements IUser {
   displayInfo(): void {
     console.log(`User Info - ID: ${this.id}, Name: ${this.name}, Email: ${this.email}, Age: ${this.age}, Active: ${this.isActive}`);
   }
+  // method with arrow function syntax
+  getIsActive = (message: string): string => {
+    return `${message} - User ${this.name} is ${this.isActive ? "active" : "inactive"}`;
+  }
+
 }
 
 const user1 = new UserClass(1, "Alice", "alice@gmail.com", 28, true);
 user1.displayInfo();
+console.log(user1.getIsActive("Status Check"));
 const user2 = new UserClass(2, "Bob", undefined, null, false);
 user2.displayInfo();
+console.log(user2.getIsActive("Status Check"));
 
 // Interfaces with Functions signatures
 console.log("---------------------- Interfaces with Function Signatures ----------------------");
