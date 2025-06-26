@@ -2156,6 +2156,7 @@ function printLength(value: unknown) {
   }
 }
 ```
+
 ##### 2. `instanceof` – for class instances
 
 ```ts
@@ -2175,7 +2176,29 @@ function useThing(thing: Animal | Car) {
   }
 }
 ```
-##### 3. Custom Type Guard (Type Predicate)
+
+##### 3. Using `in` Type Guard
+
+Checks if a property exists on an object—useful for distinguishing between object types.
+
+```ts
+type Cat = { meow: () => void };
+type Dog = { bark: () => void };
+
+function makeSound(animal: Cat | Dog) {
+  if ("meow" in animal) {
+    animal.meow(); // ✅ animal is Cat
+  } else {
+    animal.bark(); // ✅ animal is Dog
+  }
+}
+```
+
+- Use when types have unique property names.
+- TypeScript narrows the type based on the property check.
+- Great for union types with distinct members.
+
+##### 4. Custom Type Guard (Type Predicate)
 
 This is 🔥 powerful — lets you define your own check.
 
@@ -2195,7 +2218,7 @@ function logValue(value: unknown) {
 * Notice `value is string` → this is the **type predicate**
 * TypeScript narrows the type if the function returns `true`
 
-##### 4. Discriminated Unions
+##### 5. Discriminated Unions
 
 Perfect with `switch` + `never`
 
@@ -2216,7 +2239,7 @@ function area(shape: Shape) {
 ```
 ✅ TS automatically narrows `shape` to the correct type based on the `kind` field.
 
-#### 5. **Equality Narrowing**
+##### 6. **Equality Narrowing**
 Using `===`, `!==`, `==`, or `!=` checks.
 
 ```typescript
@@ -2238,12 +2261,15 @@ function example(x: string | number, y: string | boolean) {
 
 #### 🧱 Summary Brick
 
-| Type Guard          | Use For                   | Example                     |
-| ------------------- | ------------------------- | --------------------------- |
-| `typeof`            | Primitives                | `typeof value === "string"` |
-| `instanceof`        | Class instances           | `if (a instanceof MyClass)` |
-| Custom predicate    | Complex checks / unknown  | `value is string`           |
-| Discriminated union | Objects with shared field | `switch (obj.kind)`         |
+| Type Guard          | Use For                        | Example                              |
+|---------------------|--------------------------------|--------------------------------------|
+| `typeof`            | Primitives                     | `typeof value === "string"`          |
+| `instanceof`        | Class instances                | `if (obj instanceof MyClass)`        |
+| `in`                | Property existence on objects  | `"bark" in animal`                   |
+| Custom predicate    | Complex checks / unknown types | `function isFoo(x): x is Foo { ... }`|
+| Discriminated union | Objects with shared/tagged key | `switch (obj.kind)`                  |
+| Equality narrowing  | Value comparison               | `if (x === y)`                       |
+
 
 ---
 
