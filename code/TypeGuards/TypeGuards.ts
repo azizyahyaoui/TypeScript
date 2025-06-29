@@ -146,3 +146,103 @@ function printValue(x: string | number, y: string | boolean) {
 
 printValue("hello", "hello"); // Both strings
 printValue(42, true); // Different types
+
+
+// Type guard with interfaces:
+console.log("------------------------ Type guard with interfaces ------------------------")
+
+enum Tags{
+  Employee = "Employee",
+  Manager = "manager"
+}
+
+interface Person{
+  readonly id: number | string;
+  username : string;
+  age: Number;  
+  getDetails() :void;
+}
+
+interface Person{
+  email: string;
+  address: (string | number)[] 
+}
+
+
+
+const MedAziz: Person={ //interface merging
+  id: "1",
+  username: "Med AZiz",
+  age: 27,
+  email:"aziz@mail.xyz",
+  address:["Tunisia.Siliana","Bargou", 6100],
+  getDetails() {
+      return `User with id:${this.id}, username:${this.username}, age: ${this.age}, email: ${this.email}, located-in: ${this.address}`
+  },
+}
+
+
+console.log(MedAziz.getDetails());
+
+interface Employee extends Person{
+  tag: Tags.Employee,
+  slaray: number,
+  occupation: string,
+  department: string,
+}
+
+const Bilel: Employee= {
+  tag: Tags.Employee,
+  id: "2",
+  username: "Bilel Nahal",
+  age: 27,
+  email:"biN@email.xyz",
+  address: ["Tunisia.Siliana","Bargou", 6100],
+  slaray: 2000,
+  occupation: "Nuers",
+  department: "Medical",
+  getDetails(){
+    return `User with id:${this.id}, username:${this.username}, age: ${this.age}, ocuppation:${this.occupation}, department: ${this.department}, email: ${this.email}, located-in: ${this.address}`
+  }
+}
+
+console.log(Bilel.getDetails());
+
+interface Manager extends Person{
+  tag: Tags.Manager,
+  slaray: number,
+  occupation: string,
+  department: string,
+  Managing():void;
+}
+
+const Chedli: Manager= {
+  tag: Tags.Manager,
+  id: "3",
+  username: "Chedli Janhani",
+  age: 27,
+  email:"chedli@email.xyz",
+  address: ["Tunisia.Soliman",],
+  slaray: 4500,
+  occupation: "Project Manager",
+  department: "Dev production",
+  getDetails(){
+    return `User with id:${this.id}, username:${this.username}, age: ${this.age}, ocuppation:${this.occupation}, department: ${this.department}, email: ${this.email}, located-in: ${this.address}`
+  },
+  Managing(){
+    return `${this.username}, is the Manager of the ${this.department} department.`
+  }
+}
+
+console.log(Chedli.getDetails());
+console.log(Chedli.Managing());
+
+
+const isEmployee =(emp: Employee): emp is Employee => {
+  return emp.tag === Tags.Employee;
+}
+
+const isManager = (manager: Manager):  manager is Manager => {
+  return manager.tag === Tags.Manager;
+}
+
