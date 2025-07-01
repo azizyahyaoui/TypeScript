@@ -206,6 +206,55 @@ const Bilel: Employee= {
   }
 }
 
+const Tarek: Employee = {
+  tag: Tags.Employee,
+  id: "4",
+  username: "Tarek Ben Salah",
+  age: 30,
+  email: "Tarek@email.xyz",
+  address: ["Tunisia.Tunis", "Centre Ville", 1000],
+  slaray: 2500,
+  occupation: "Developer",
+  department: "IT",
+  getDetails() {
+    return `User with id:${this.id}, username:${this.username}, age: ${this.age}, ocuppation:${this.occupation}, department: ${this.department}, email: ${this.email}, located-in: ${this.address}`;
+  }
+};
+
+const Ghofran: Employee = {
+  tag: Tags.Employee,
+  id: "5",
+  username: "Ghofran Trabelsi",
+  age: 28,
+  email: "Ghofran@email.xyz",
+  address: ["Tunisia.Sfax", "Sakiet Ezzit", 3021],
+  slaray: 2200,
+  occupation: "Designer",
+  department: "Creative",
+  getDetails() {
+    return `User with id:${this.id}, username:${this.username}, age: ${this.age}, ocuppation:${this.occupation}, department: ${this.department}, email: ${this.email}, located-in: ${this.address}`;
+  }
+};
+
+const Chiheb: Employee = {
+  tag: Tags.Employee,
+  id: "6",
+  username: "Chiheb Kacem",
+  age: 35,
+  email: "Chiheb@email.xyz",
+  address: ["Tunisia.Bizerte", "Menzel Bourguiba", 7050],
+  slaray: 2700,
+  occupation: "QA Engineer",
+  department: "Quality Assurance",
+  getDetails() {
+    return `User with id:${this.id}, username:${this.username}, age: ${this.age}, ocuppation:${this.occupation}, department: ${this.department}, email: ${this.email}, located-in: ${this.address}`;
+  }
+};
+
+console.log(Tarek.getDetails());
+console.log(Ghofran.getDetails());
+console.log(Chiheb.getDetails());
+
 console.log(Bilel.getDetails());
 
 interface Manager extends Person{
@@ -245,4 +294,3 @@ const isEmployee =(emp: Employee): emp is Employee => {
 const isManager = (manager: Manager):  manager is Manager => {
   return manager.tag === Tags.Manager;
 }
-
