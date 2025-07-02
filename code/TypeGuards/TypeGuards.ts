@@ -182,8 +182,6 @@ const MedAziz: Person={ //interface merging
 }
 
 
-console.log(MedAziz.getDetails());
-
 interface Employee extends Person{
   tag: Tags.Employee,
   slaray: number,
@@ -251,11 +249,6 @@ const Chiheb: Employee = {
   }
 };
 
-console.log(Tarek.getDetails());
-console.log(Ghofran.getDetails());
-console.log(Chiheb.getDetails());
-
-console.log(Bilel.getDetails());
 
 interface Manager extends Person{
   tag: Tags.Manager,
@@ -283,14 +276,32 @@ const Chedli: Manager= {
   }
 }
 
-console.log(Chedli.getDetails());
-console.log(Chedli.Managing());
 
 
-const isEmployee =(emp: Employee): emp is Employee => {
-  return emp.tag === Tags.Employee;
+
+const isEmployee =(person: Person): person is Employee => {
+  return (person as Employee).tag === Tags.Employee;
 }
 
-const isManager = (manager: Manager):  manager is Manager => {
-  return manager.tag === Tags.Manager;
+const isManager = (person: Person):  person is Manager => {
+  return (person as Manager).tag === Tags.Manager;
 }
+
+// GetPersonDaitials
+
+const getPersonDetails = (p: Person): void => {
+    if (isEmployee(p)) {
+        console.log(p.getDetails());
+    } else if (isManager(p)) { 
+        console.log(p.getDetails());
+        console.log(p.Managing());
+    } else {
+        console.log('Not listed!!');
+    }
+}
+
+getPersonDetails(Chedli);
+getPersonDetails(Bilel);
+getPersonDetails(Ghofran);
+getPersonDetails(Tarek);
+getPersonDetails(Chiheb);
