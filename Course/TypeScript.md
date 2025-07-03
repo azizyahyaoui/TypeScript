@@ -2109,21 +2109,216 @@ const point: Coord = { x: 10, y: 20 }; // Must have both x and y
 
 ---
 
-### Generics
-```typescript
+### **Generics**
+
+#### Intro to Generics:
+
+- 🧠 What Are Generics?
+
+**Generics** allow you to write **flexible and reusable code** that works with **any type**, while still keeping type safety.
+
+It's like a **type placeholder** — instead of hardcoding a type, you define a "generic type" (like `T`, `U`, etc.) that will be **filled in later** when the function/class/interface is used.
+
+- 🧪 Why Use Generics?
+
+Without generics:
+
+```ts
+function identity(arg: any): any {
+  return arg;
+}
+```
+
+* ✅ Works with anything
+* ❌ Loses type safety
+  (you pass a number, get back `any`, no intellisense)
+
+With generics:
+
+```ts
 function identity<T>(arg: T): T {
   return arg;
 }
 
-interface ApiResponse<T> {
-  data: T;
-  status: number;
+const result = identity<number>(42); // result is number ✅
+```
+
+* ✅ Works with any type
+* ✅ Keeps **exact type**
+
+---
+
+#### 1. **Generic Function**
+
+```ts
+function wrapInArray<T>(value: T): T[] {
+  return [value];
 }
 
+const strArr = wrapInArray("hello"); // Type: string[]
+const numArr = wrapInArray(5);       // Type: number[]
+```
+
+#### 2. **Generic Interface**
+
+```ts
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
+}
+
+const userResponse: ApiResponse<{ name: string; age: number }> = {
+  success: true,
+  data: {
+    name: "Aziz",
+    age: 25,
+  }
+};
+```
+
+#### 3. **Generic Class**
+
+```ts
 class Box<T> {
-  constructor(public content: T) {}
+  content: T;
+  constructor(content: T) {
+    this.content = content;
+  }
+}
+
+const stringBox = new Box("Hello");     // Box<string>
+const numberBox = new Box(123);         // Box<number>
+```
+
+#### 4. **Generic with Constraints**
+
+If you want to limit what kind of types can be used:
+
+```ts
+function printLength<T extends { length: number }>(value: T): void {
+  console.log(value.length);
+}
+
+printLength("Aziz");      // OK
+printLength([1, 2, 3]);    // OK
+// printLength(123);       // ❌ Error: number has no length
+```
+
+---
+
+#### 🪛 Bonus: Default Generic Types
+
+```ts
+function doSomething<T = string>(value: T): T {
+  return value;
+}
+
+doSomething();         // T is string by default
+doSomething(100);      // T is number
+```
+
+---
+
+#### 🧱 Summary (Cheat Sheet Style)
+
+| Syntax                   | Purpose                      |
+| ------------------------ | ---------------------------- |
+| `function<T>(arg: T): T` | Generic function             |
+| `interface<T> {...}`     | Generic interface            |
+| `class<T> {...}`         | Generic class                |
+| `<T extends U>`          | Add constraint to T          |
+| `<T = DefaultType>`      | Provide default generic type |
+
+
+#### Example with  `filter<T>`, `merge<T, U>`:
+
+> Let’s dive into two very common and **super useful** generic function examples: `filter<T>` and `merge<T, U>`. These are fantastic to understand how generics shine in real-world code.
+
+---
+
+##### 🔍 1. `filter<T>` — Generic Filtering Function
+
+###### ✅ Goal:
+
+A function that accepts an array of type `T`, and a filter function that works on `T`. It returns a filtered array of `T`.
+
+###### 💡 Code:
+
+```ts
+function filter<T>(array: T[], callback: (item: T) => boolean): T[] {
+  const result: T[] = [];
+  for (const item of array) {
+    if (callback(item)) {
+      result.push(item);
+    }
+  }
+  return result;
 }
 ```
+
+###### 🧪 Usage:
+
+```ts
+const numbers = [1, 2, 3, 4, 5, 6];
+const evenNumbers = filter(numbers, (n) => n % 2 === 0);
+console.log(evenNumbers); // [2, 4, 6]
+
+const names = ["Aziz", "Bilel", "Admin"];
+const filteredNames = filter(names, (name) => name !== "Admin");
+console.log(filteredNames); // ["Aziz", "Bilel"]
+```
+
+* ✅ Works with any type
+* ✅ Type-safe with full intellisense
+
+---
+
+##### 🔀 2. `merge<T, U>` — Merge Two Objects
+
+###### ✅ Goal:
+
+A function that merges two objects of different types `T` and `U`, and returns a new object that combines both.
+
+###### 💡 Code:
+
+```ts
+function merge<T, U>(obj1: T, obj2: U): T & U {
+  return { ...obj1, ...obj2 };
+}
+```
+
+###### 🧪 Usage:
+
+```ts
+const user = { name: "Aziz" };
+const details = { age: 25, isAdmin: false };
+
+const mergedUser = merge(user, details);
+/*
+mergedUser has type:
+{
+  name: string;
+  age: number;
+  isAdmin: boolean;
+}
+*/
+
+console.log(mergedUser); // { name: 'Aziz', age: 25, isAdmin: false }
+```
+
+* ✅ Types are merged
+* ✅ Access to all fields with proper type inference
+
+---
+
+###### 🧱 Summary
+
+| Function     | Description                            |
+| ------------ | -------------------------------------- |
+| `filter<T>`  | Filter any array with full type safety |
+| `merge<T,U>` | Merge two objects and keep both types  |
+
+---
 
 ### Utility Types
 ```typescript
@@ -2654,6 +2849,78 @@ npx tsup src/index.ts --watch --onSuccess "node dist/index.js"
 
 **Pro Tip**: Always use the [TypeScript Playground](https://www.typescriptlang.org/play) to experiment with types!
 
+## Gotchas
+
+### In generics
+
+> TypeScript Generics – Notes & Gotchas
+
+Generics allow you to write reusable, type-safe code without sacrificing flexibility. They act like *type placeholders* that get filled in when the function or type is used.
+
+```ts
+function identity<T>(value: T): T {
+  return value;
+}
+```
+
+#### ⚠️ TypeScript vs Runtime
+
+TypeScript only exists **at compile time**. If you pass a wrong type (e.g. `string[]` instead of `number[]`), TypeScript will show an error — but **the code will still run** if compiled or executed using `ts-node`.
+
+#### 🚫 Problem Example (Without Generics)
+
+```ts
+const getFirstElement = (item: number[]) => {
+  return item[0];
+};
+
+const stringsArray = ["JP", "UK", "TN"];
+const firstString = getFirstElement(stringsArray); // ❌ TS2345
+console.log(firstString); // ✅ Still logs: "JP"
+```
+
+* TypeScript error ✅
+* JavaScript runtime still returns a value ❗
+
+---
+
+#### ✅ Solution: Use Generics
+
+```ts
+const getFirstElement = <T>(item: T[]): T => {
+  return item[0];
+};
+
+const numbers = [1, 2, 3];
+const firstNum = getFirstElement(numbers); // number ✅
+
+const countries = ["JP", "UK", "TN"];
+const firstCountry = getFirstElement(countries); // string ✅
+```
+
+* Automatically infers and enforces the correct type
+* Reusable with any array type
+
+---
+
+#### 🧱 Bonus: Safer Version with Fallback
+
+```ts
+const getFirstElement = <T>(item: T[]): T | undefined => {
+  return item.length > 0 ? item[0] : undefined;
+};
+```
+
+#### 💡 Summary
+
+| Concept            | Explanation                                   |                                    |
+| ------------------ | --------------------------------------------- | ---------------------------------- |
+| `function<T>`      | Generic function                              |                                    |
+| Error + Runtime OK | TS flags type mismatch, but JS still executes |                                    |
+| Fix it with `<T>`  | Flexible and safe – no more hardcoded types   |                                    |
+| Safe version       | Use \`T                                       | undefined\` to handle empty arrays |
+
+---
 
 # Funny notes:
 
