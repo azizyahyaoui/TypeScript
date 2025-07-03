@@ -5,6 +5,7 @@
  *    - They provide type safety without losing flexibility.
  *    - You can define functions, classes, and interfaces that work with different types.
  *    - Use angle brackets <> to define generic type parameters(T,U,V..).
+ * - FACT: generics are over all places such in `document.querySelector(".classElement")`, it just `document.querySelector<HTMLClassElement>(".classElement")`
  * 
  * Syntax:
  * - function:
@@ -12,6 +13,9 @@
  *      function identity<T>(arg: T): T {
  *        return arg;
  *      }
+ *      
+ *    - With arrow function:
+ *      const getSecondElement = <T>(arg: T) => {return arg;}
  * 
  * - Interface:
  * 
@@ -68,25 +72,64 @@ console.log(`The last number is: ${lastNumber}`);
 
 //Array of strings
 const strArray = ["JP","UK","TN","USA","ALG"]
-const lastString = getLasElement(stringsArray) //eslint: not assignable
-console.log(`The last string is: ${lastString}`) // Still returns JP
+const lastString = getLasElement(stringsArray)
+console.log(`The last string is: ${lastString}`)
 
 
 
 // Generics
 console.log("------------------------------(Using Generics)------------------------------");
+//Using the same example but now with Generics:
+
+
+const getSecondElement = <ElementType>(item: ElementType[]) => {
+  return item[1];
+}
+
+//Array of numbers
+const phoneCode = [216, 218, 213, 1, 44, 81]
+const secondNumber = getSecondElement(phoneCode)
+console.log(`The second code number is: ${secondNumber}`);
+
+//Array of strings
+const countryArray = ["JP","UK","TN","USA","ALG"]
+const secondCountry = getSecondElement(countryArray)
+console.log(`The second country in the list is: ${secondCountry}`)
 
 
 
 
 
-//
-console.log("------------------------------()------------------------------");
+//Interface with generics
+console.log("------------------------------(Interface with generics)------------------------------");
 
 
-//
-console.log("------------------------------()------------------------------");
 
+
+//Class with generics
+console.log("------------------------------(Class with generics)------------------------------");
+
+
+
+
+//Extending generics`<T extends U>`
+console.log("------------------------------(Extending generics`<T extends U>`)------------------------------");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Generics with default type `<T = DefaultType>`
+console.log("------------------------------(Generics with default type `<T = DefaultType>`)------------------------------");
 
 
 // Examples With the most useful function filter<T>, merge<T, U>,
