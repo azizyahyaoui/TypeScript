@@ -104,6 +104,51 @@ console.log(`The second country in the list is: ${secondCountry}`)
 console.log("------------------------------(Interface with generics)------------------------------");
 
 
+interface ApiResponseInter<APIData> {
+  status: number;
+  message: string;
+  data:APIData; 
+}
+
+
+interface Users {
+  id: number;
+  name: string;
+  email: string;
+}
+
+
+interface Products {
+  id: number;
+  name: string;
+  price: number;
+}
+
+
+const userApiResponse: ApiResponseInter<Users> = {
+  status: 200,
+  message: "User fetched successfully",
+  data: {
+    id: 1,
+    name: "Aziz Dev",
+    email: "aziz@example.dev"
+  }
+};
+console.log(`Fetching data from user API:\n ${JSON.stringify(userApiResponse, null,2)}`);
+
+const productsApiResponse: ApiResponseInter<Products> = {
+  status: 200,
+  message: "Product details retrieved",
+  data: {
+    id: 99,
+    name: "TS Coding Book",
+    price: 42.5
+  }
+};
+
+console.log(`Fetching data from products API:\n ${JSON.stringify(productsApiResponse, null,2)}\n`);
+
+
 
 
 //Class with generics
