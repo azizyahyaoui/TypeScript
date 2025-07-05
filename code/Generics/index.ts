@@ -8,6 +8,7 @@
  *    - Use angle brackets <> to define generic type parameters(T,U,V..).
  * - FACT: generics are over all places such in `document.querySelector(".classElement")`, it just `document.querySelector<HTMLClassElement>(".classElement")` or even with maps : map = New Map<string, number>();
  *                                                                     map = New Map<number, Map<string, number>>();
+ *    - Array also are generics `interface Array<T>{....}}`
  * -----------------------------------------------------------------------------------------------------------------
  * Syntax:
  * - function:
@@ -100,8 +101,6 @@ console.log(`The second country in the list is: ${secondCountry}`)
 
 
 
-
-
 //Interface with generics
 console.log("------------------------------(Interface with generics)------------------------------");
 
@@ -149,6 +148,9 @@ const productsApiResponse: ApiResponseInter<Products> = {
 };
 
 console.log(`Fetching data from products API:\n ${JSON.stringify(productsApiResponse, null, 2)}\n`);
+
+
+
 
 //Types with generics
 console.log("------------------------------(Types with generics)------------------------------");
@@ -202,7 +204,7 @@ const ebook: EBooks = {
   format: "EPUB",
   fileSizeMB: 4.2
 };
-const blog:BLogs = {
+const blog: BLogs = {
   blogId: 1,
   blogTitle: "TypeScript Generics",
   blogAuthor: "Med Aziz"
@@ -212,11 +214,11 @@ const getPaginatedBooks = (): PaginationResults<Books | EBooks | BLogs> => {
   return {
     currentPage: 1,
     totalPages: 5,
-    items: [book,secBook,ebook,blog]
+    items: [book, secBook, ebook, blog]
   }
 }
 
-console.log(`Fetching data from books API:\n ${JSON.stringify(getPaginatedBooks(), null,2)}\n`)
+console.log(`Fetching data from books API:\n ${JSON.stringify(getPaginatedBooks(), null, 2)}\n`)
 /* 
 const books = getPaginatedBooks();
 console.log("First book:", books.items[0]); */
@@ -224,6 +226,8 @@ console.log("First book:", books.items[0]); */
 
 //Class with generics
 console.log("------------------------------(Class with generics)------------------------------");
+
+
 
 
 
