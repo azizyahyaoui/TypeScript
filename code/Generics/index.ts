@@ -228,34 +228,99 @@ console.log("First book:", books.items[0]); */
 console.log("------------------------------(Class with generics)------------------------------");
 
 
+// Generic class definition
 
+class DataStorage<T> {
+  items: T[] = [];
 
+  add(item: T): void {
+    this.items.push(item);
+  }
+
+  getAll(): T[] {
+    return [...this.items];
+  }
+
+  remove(item: T): void {
+    this.items = this.items.filter(i => i !== item);
+  }
+}
+
+// Example usage with strings
+const stringStorage = new DataStorage<string>();
+stringStorage.add("Aziz’s first item");
+stringStorage.add("Aziz’s second item");
+console.log(stringStorage.getAll());
+
+// Example with a custom type
+type ABook = {
+  title: string;
+  author: string;
+};
+
+const bookStorage = new DataStorage<ABook>();
+bookStorage.add({ title: "TypeScript Tonic", author: "Aziz Dev" });
+console.log(bookStorage.getAll());
 
 
 //Extending generics`<T extends U>`
 console.log("------------------------------(Extending generics`<T extends U>`)------------------------------");
 
+// Example: Only allow objects with an 'id' property
+interface HasId {
+  id: number;
+}
 
+function printId<T extends HasId>(item: T): void {
+  console.log(`ID is: ${item.id}`);
+}
 
+const userWithId = { id: 123, name: "Aziz" };
+printId(userWithId); // OK
 
-
-
-
-
-
-
-
-
+// const invalid = { name: "NoId" };
+// printId(invalid); // Error: Property 'id' is missing
 
 
 //Generics with default type `<T = DefaultType>`
 console.log("------------------------------(Generics with default type `<T = DefaultType>`)------------------------------");
 
+type ApiResult<T = string> = {
+  status: number;
+  data: T;
+};
+
+const defaultResult: ApiResult = { status: 200, data: "Default string data" };
+const numberResult: ApiResult<number> = { status: 200, data: 42 };
+
+console.log(defaultResult);
+console.log(numberResult);
 
 // Examples With the most useful function filter<T>, merge<T, U>,
 console.log("------------------------------(filter<T>)------------------------------");
 
+function myFilter<T>(arr: T[], predicate: (item: T) => boolean): T[] {
+  const result: T[] = [];
+  for (const item of arr) {
+    if (predicate(item)) result.push(item);
+  }
+  return result;
+}
 
+const nums = [1, 2, 3, 4, 5];
+const evenNums = myFilter(nums, n => n % 2 === 0);
+console.log("Even numbers:", evenNums);
+
+const words = ["TS", "JS", "C#", "Go"];
+const longWords = myFilter(words, w => w.length > 2);
+console.log("Long words:", longWords);
 
 // merge<T, U>
 console.log("------------------------------(merge<T, U>)------------------------------");
+
+function merge<T, U>(obj1: T, obj2: U): T & U {
+  return { ...obj1, ...obj2 };
+}
+
+const merged = merge({ name: "Aziz" }, { age: 30, country: "TN" });
+console.log("Merged object:", merged);

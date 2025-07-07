@@ -50,5 +50,41 @@ const MyUsers: Users = {
 const asyncFunction = async (userData:Users): Promise<Users> =>{
     return userData;
 }
+/* asyncFunction(MyUsers).then(user => {
+    console.log(`Fetching user data: \n`, user);
+});
+ */
 
-console.log(`Fetching user data: \n ${JSON.stringify(asyncFunction(MyUsers))}`);
+// Get index of an item from an array
+type Cars = {
+    readonly id: number,
+    brand: string,
+    yearModel: string,
+    color: string,
+}
+
+let carsNumberPlate: number[] = [216,213,1,8,84,125]
+
+let carsArray: Cars[] = [
+    { id: 1, brand: "Toyota", yearModel: "2020", color: "Red" },
+    { id: 2, brand: "Honda", yearModel: "2019", color: "Blue" },
+    { id: 3, brand: "Ford", yearModel: "2021", color: "Black" },
+    { id: 4, brand: "BMW", yearModel: "2018", color: "White" }
+]
+
+
+const getItemIndex = <ArrayItems>(table: ArrayItems[], arrayItem: ArrayItems ): number =>{
+    return table.findIndex(
+        (item) => item === arrayItem
+    );
+}
+const findIndexBy=<T>(array: T[],predicate: (item: T) => boolean): number => {
+    return array.findIndex(predicate);
+}
+
+const carIndex = findIndexBy(carsArray, (car) => car.id === 3);
+console.log(`Car found at index: ${carIndex}`); //
+
+const carPlateIndex = findIndexBy(carsNumberPlate,(plate) =>  plate === 84)
+console.log(`Car Plate found at index: ${carPlateIndex}`);
+
