@@ -2320,13 +2320,215 @@ console.log(mergedUser); // { name: 'Aziz', age: 25, isAdmin: false }
 
 ---
 
-### Utility Types
-```typescript
-type PartialUser = Partial<User>;  // All properties optional
-type ReadonlyUser = Readonly<User>;
-type UserPreview = Pick<User, "id" | "username">;
-type UserWithoutId = Omit<User, "id">;
+### **Utility Types**
+
+> TypeScript provides several **built-in utility types** to help transform and manipulate types in a reusable and expressive way. These utilities work on top of generic types and make type transformations more readable and powerful.
+
+---
+
+#### 🔹 `Partial<T>`
+
+**What it does:**  
+Makes **all properties** in type `T` **optional**. Useful for update patterns, patch objects, or when you want to allow incomplete data.
+
+```ts
+type User = {
+  id: number;
+  name: string;
+};
+
+const updateUser = (user: Partial<User>) => {
+  // can pass { name: "Aziz" } or { id: 2 }
+};
 ```
+*Now you can pass any subset of `User` properties—great for PATCH APIs or form updates.*
+
+---
+
+#### 🔹 `Required<T>`
+
+**What it does:**  
+Makes **all optional properties** in `T` **required**. This is the opposite of `Partial<T>`, ensuring that every property must be present.
+
+```ts
+type Profile = {
+  name?: string;
+  age?: number;
+};
+
+type CompleteProfile = Required<Profile>; // name and age are now required
+```
+*Use this when you want to enforce that all fields must be filled in, such as before saving to a database.*
+
+---
+
+#### 🔹 `Readonly<T>`
+
+**What it does:**  
+Makes **all properties** in `T` **read-only** (immutable). You cannot reassign any property after initialization.
+
+```ts
+type Config = {
+  port: number;
+};
+
+const serverConfig: Readonly<Config> = { port: 8080 };
+// serverConfig.port = 3000 ❌ Error: cannot assign to readonly property
+```
+*Great for constants, configuration objects, or preventing accidental mutation.*
+
+---
+
+#### 🔹 `Record<K, T>`
+
+**What it does:**  
+Constructs an object type with keys `K` and values `T`.  
+`K` is usually a union of string or number literals.
+
+```ts
+type Roles = 'admin' | 'user' | 'guest';
+
+const permissions: Record<Roles, boolean> = {
+  admin: true,
+  user: true,
+  guest: false
+};
+```
+*Use this to create type-safe dictionaries or maps where you know all possible keys ahead of time.*
+
+---
+
+#### 🔹 `Pick<T, K>`
+
+**What it does:**  
+Creates a type by **picking a subset of properties** (`K`) from type `T`.  
+Keeps only the specified keys.
+
+```ts
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
+
+type UserPreview = Pick<User, 'id' | 'name'>;
+```
+*Handy for creating lightweight views or DTOs with only the needed fields.*
+
+---
+
+#### 🔹 `Omit<T, K>`
+
+**What it does:**  
+Creates a type by **omitting** a subset of properties (`K`) from type `T`.  
+Removes the specified keys.
+
+```ts
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
+
+type UserWithoutEmail = Omit<User, 'email'>;
+```
+*Useful for hiding sensitive fields or customizing types for different layers.*
+
+---
+
+#### 🔹 `Exclude<T, U>`
+
+**What it does:**  
+Removes from `T` **all types** that are assignable to `U`.  
+Works with union types.
+
+```ts
+type Status = 'success' | 'error' | 'loading';
+
+type NonLoading = Exclude<Status, 'loading'>; // 'success' | 'error'
+```
+*Use this to filter out unwanted members from a union.*
+
+---
+
+#### 🔹 `Extract<T, U>`
+
+**What it does:**  
+Extracts from `T` **only the types** that are assignable to `U`.
+
+```ts
+type Status = 'success' | 'error' | 'loading';
+
+type OnlyLoading = Extract<Status, 'loading'>; // 'loading'
+```
+*Use this to get a subset of a union that matches a certain type.*
+
+---
+
+#### 🔹 `NonNullable<T>`
+
+**What it does:**  
+Removes `null` and `undefined` from type `T`.
+
+```ts
+type MaybeString = string | null | undefined;
+
+type StrictString = NonNullable<MaybeString>; // just string
+```
+*Great for ensuring a value is always present before further processing.*
+
+---
+
+#### 🔹 `ReturnType<T>`
+
+**What it does:**  
+Gets the **return type** of a function type `T`.  
+Useful for inferring types from existing functions.
+
+```ts
+function getAge() {
+  return 30;
+}
+
+type Age = ReturnType<typeof getAge>; // number
+```
+*Helps keep types in sync when refactoring or using higher-order functions.*
+
+---
+
+#### 🔹 `Parameters<T>`
+
+**What it does:**  
+Gets the **parameter types** of a function as a tuple.
+
+```ts
+function greet(name: string, age: number) {
+  return `Hello ${name}, age ${age}`;
+}
+
+type GreetArgs = Parameters<typeof greet>; // [string, number]
+```
+*Useful for generic wrappers, decorators, or when you want to forward arguments.*
+
+---
+
+**Summary Table:**
+
+| Utility Type         | What it Does                                      | Example Use Case                        |
+|----------------------|---------------------------------------------------|-----------------------------------------|
+| `Partial<T>`         | All properties optional                           | PATCH APIs, partial updates             |
+| `Required<T>`        | All properties required                           | Validation, before save                 |
+| `Readonly<T>`        | All properties immutable                          | Config, constants                       |
+| `Record<K, T>`       | Object with keys `K` and values `T`               | Role maps, lookup tables                |
+| `Pick<T, K>`         | Only specified keys from `T`                      | DTOs, previews                          |
+| `Omit<T, K>`         | All but specified keys from `T`                   | Hide sensitive fields                   |
+| `Exclude<T, U>`      | Remove types in `U` from union `T`                | Filter out unwanted union members       |
+| `Extract<T, U>`      | Keep only types in `U` from union `T`             | Narrow down union types                 |
+| `NonNullable<T>`     | Remove `null` and `undefined` from `T`            | Ensure value is always present          |
+| `ReturnType<T>`      | Get return type of function                       | Infer output type for wrappers          |
+| `Parameters<T>`      | Get parameter types of function as tuple          | Forwarding or reusing function args     |
+
+---
 
 ### **Type Guards**
 
