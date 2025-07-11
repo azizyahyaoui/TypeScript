@@ -2324,6 +2324,8 @@ console.log(mergedUser); // { name: 'Aziz', age: 25, isAdmin: false }
 
 > TypeScript provides several **built-in utility types** to help transform and manipulate types in a reusable and expressive way. These utilities work on top of generic types and make type transformations more readable and powerful.
 
+[TS utility types docs](https://www.typescriptlang.org/docs/handbook/utility-types.html)
+
 ---
 
 #### 🔹 `Partial<T>`
