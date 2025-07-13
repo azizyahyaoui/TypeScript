@@ -2672,9 +2672,9 @@ function example(x: string | number, y: string | boolean) {
 
 ---
 
-### **Classes & OOP in TypeScript**b
+### **Classes & OOP in TypeScript**
 
-TypeScript brings full **object-oriented programming** (OOP) features to JavaScript: classes, inheritance, access modifiers, abstract classes, interfaces, and more.
+> TypeScript brings full **object-oriented programming** (OOP) features to JavaScript: classes, inheritance, access modifiers, abstract classes, interfaces, and more.
 
 ---
 
@@ -2699,7 +2699,7 @@ const p = new Person("Aziz", 24);
 p.greet();
 ```
 
-- Classes encapsulate data and behavior.
+- Classes encapsulate data and behavior. 
 - Constructor initializes properties.
 - Methods define actions.
 
@@ -2771,7 +2771,7 @@ class Account {
 ```
 
 - Getters/setters provide controlled access to properties.
-
+- Can add logic like validation inside setters same as Java.
 ---
 
 #### 🔹 `readonly` & `static`
@@ -2831,6 +2831,8 @@ class ConsoleLogger implements Logger {
   }
 }
 ```
+✅ Use `implements` to enforce contracts.
+✅ Supports multiple interfaces (unlike `extends`).
 
 ---
 
@@ -2842,6 +2844,20 @@ class ConsoleLogger implements Logger {
 - Use OOP features for scalable, maintainable code in large projects.
 
     --> If you know the OOP from Java and want to know the deference between them check bellow(TypeScript vs Java – OOP Comparison section) 
+#### 🧱 Summary Brick
+
+| Feature              | Example                          | Purpose                |
+| -------------------- | -------------------------------- | ---------------------- |
+| Class                | `class Person {}`                | Blueprint for objects  |
+| Constructor          | `constructor(name: string)`      | Initializes fields     |
+| Inheritance          | `class Admin extends User`       | Reuse logic            |
+| Access Modifiers     | `private`, `protected`, `public` | Control visibility     |
+| Abstract Class       | `abstract class Shape`           | Base for other classes |
+| Implements Interface | `implements Printable`           | Enforce structure      |
+| Readonly             | `readonly id: number`            | Prevent mutation       |
+| Static               | `static count = 0`               | Class-level property   |
+| Getter/Setter        | `get name()`, `set name()`       | Encapsulate access     |
+
 ---
 
 
