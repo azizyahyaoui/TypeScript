@@ -2672,28 +2672,178 @@ function example(x: string | number, y: string | boolean) {
 
 ---
 
-### Classes & OOP
-```typescript
-class Animal {
-    name: string;
-    constructor(name: string) {
-        this.name = name;
-    }
-    move(distanceInMeters: number = 0) {
-        console.log(`${this.name} moved ${distanceInMeters}m.`);
-    }
+### **Classes & OOP in TypeScript**b
+
+TypeScript brings full **object-oriented programming** (OOP) features to JavaScript: classes, inheritance, access modifiers, abstract classes, interfaces, and more.
+
+---
+
+#### 🔹 Declaring a Class
+
+```ts
+class Person {
+  name: string;
+  age: number;
+
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+
+  greet(): void {
+    console.log(`Hi, I'm ${this.name} and I'm ${this.age} years old.`);
+  }
 }
 
-class Dog extends Animal {
-    bark() {
-        console.log('Woof! Woof!');
-    }
-}
-
-let dog = new Dog("Rex");
-dog.bark();
-dog.move(10);
+const p = new Person("Aziz", 24);
+p.greet();
 ```
+
+- Classes encapsulate data and behavior.
+- Constructor initializes properties.
+- Methods define actions.
+
+---
+
+#### 🔹 Access Modifiers
+
+| Modifier    | Description                                 |
+| ----------- | ------------------------------------------- |
+| `public`    | Accessible anywhere (default)               |
+| `private`   | Accessible only within the class            |
+| `protected` | Accessible in class and subclasses          |
+
+```ts
+class User {
+  public name: string;
+  private password: string;
+  protected role: string;
+
+  constructor(name: string, password: string, role: string) {
+    this.name = name;
+    this.password = password;
+    this.role = role;
+  }
+
+  getPassword(): string {
+    return this.password;
+  }
+}
+```
+
+---
+
+#### 🔹 Inheritance
+
+```ts
+class Admin extends User {
+  constructor(name: string, password: string) {
+    super(name, password, "admin");
+  }
+
+  isAdmin(): boolean {
+    return this.role === "admin";
+  }
+}
+```
+
+- Use `extends` to inherit properties and methods.
+- `super()` calls the parent constructor.
+
+---
+
+#### 🔹 Getters & Setters
+
+```ts
+class Account {
+  private _balance: number = 0;
+
+  get balance(): number {
+    return this._balance;
+  }
+
+  set balance(value: number) {
+    if (value >= 0) {
+      this._balance = value;
+    }
+  }
+}
+```
+
+- Getters/setters provide controlled access to properties.
+
+---
+
+#### 🔹 `readonly` & `static`
+
+```ts
+class Config {
+  readonly appName: string = "MyApp";
+  static version: string = "1.0.0";
+
+  static getInfo() {
+    return `Version: ${Config.version}`;
+  }
+}
+```
+
+- `readonly`: property can't be changed after initialization.
+- `static`: belongs to the class, not instances.
+
+---
+
+#### 🔹 Abstract Classes
+
+```ts
+abstract class Shape {
+  abstract area(): number;
+}
+
+class Rectangle extends Shape {
+  constructor(private width: number, private height: number) {
+    super();
+  }
+
+  area(): number {
+    return this.width * this.height;
+  }
+}
+```
+
+- Abstract classes can't be instantiated directly.
+- Must implement abstract methods in subclasses.
+
+---
+
+#### 🔹 Interfaces vs Classes
+
+- **Interfaces** define the shape (contract) of objects.
+- **Classes** implement behavior and can use interfaces.
+
+```ts
+interface Logger {
+  log(msg: string): void;
+}
+
+class ConsoleLogger implements Logger {
+  log(msg: string): void {
+    console.log(msg);
+  }
+}
+```
+
+---
+
+#### 💡 Quick Notes
+
+- Classes can implement multiple interfaces, but only extend one class.
+- Constructors and methods can use optional/union types for flexibility.
+- TypeScript enforces strict typing for class members and constructor parameters.
+- Use OOP features for scalable, maintainable code in large projects.
+
+    --> If you know the OOP from Java and want to know the deference between them check bellow(TypeScript vs Java – OOP Comparison section) 
+---
+
 
 
 ## **Tips to start with And Best Practices**
@@ -3124,6 +3274,27 @@ const getFirstElement = <T>(item: T[]): T | undefined => {
 | Fix it with `<T>`  | Flexible and safe – no more hardcoded types   |                                    |
 | Safe version       | Use \`T                                       | undefined\` to handle empty arrays |
 
+---
+
+## TypeScript vs Java – OOP Comparison:
+
+| Concept                | TypeScript Example                         | Java Equivalent                            | Notes                                                                      |
+| ---------------------- | ------------------------------------------ | ------------------------------------------ | -------------------------------------------------------------------------- |
+| Class Declaration      | `class User {}`                            | `class User {}`                            | Syntax is similar but TS compiles to JS classes (ES6+).                    |
+| Constructor            | `constructor(name: string) {}`             | `public User(String name) {}`              | TS can define params inline with access modifiers (`public name: string`). |
+| Fields                 | `name: string;`                            | `private String name;`                     | TS requires explicit typing if `strict` is on.                             |
+| Access Modifiers       | `public`, `private`, `protected`           | `public`, `private`, `protected`           | Same keywords, but enforced only at **compile time** in TS.                |
+| Inheritance            | `class Admin extends User {}`              | `class Admin extends User {}`              | Identical. No multiple inheritance (single class).                         |
+| Interfaces             | `interface Logger {}`                      | `interface Logger {}`                      | Identical conceptually.                                                    |
+| Implements             | `class ConsoleLogger implements Logger {}` | `class ConsoleLogger implements Logger {}` | Same concept. TS allows multiple interfaces, like Java.                    |
+| Abstract Classes       | `abstract class Shape {}`                  | `abstract class Shape {}`                  | Same concept.                                                              |
+| Method Override        | `override greet(): void {}`                | `@Override public void greet() {}`         | `override` keyword is optional in TS, but supported in recent versions.    |
+| Static Members         | `static count = 0;`                        | `static int count = 0;`                    | Behave the same.                                                           |
+| Readonly / Final       | `readonly id: number;`                     | `final int id;`                            | `readonly` enforces immutability in TS.                                    |
+| Abstract Method        | `abstract area(): number;`                 | `public abstract double area();`           | Same intent. Must be implemented in subclasses.                            |
+| Getter / Setter        | `get name()` / `set name(val)`             | `getName()` / `setName()`                  | TS uses property-style syntax, Java uses methods.                          |
+| Overloading            | Union types or default values              | `void foo(int)` / `void foo(String)`       | TS fakes it using union types or optional params.                          |
+| Visibility Enforcement | **Compile-time only**                      | **Compile-time + Runtime**                 | Java enforces visibility at runtime; TS does not (it’s JS).                |
 ---
 
 # Funny notes:
